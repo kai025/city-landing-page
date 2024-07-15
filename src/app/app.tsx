@@ -1,37 +1,60 @@
-import Logos from "components/atoms/logos";
-import Card from "components/organisms/card";
-import Button from "components/atoms/button";
-import CopyButton from "components/molecules/copy-button";
+import React, { useState, useEffect } from "react";
+import useUnsplashImages from "hooks/getImages";
+import Card from "components/common/Card";
 
-function App() {
+const App: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("nature");
+  const { images, loading, error } = useUnsplashImages(searchTerm);
+  const [backgroundImage, setBackgroundImage] = useState<string>("");
+
+  useEffect(() => {
+    if (images.length > 0) {
+      setBackgroundImage(images[0].urls.full);
+    }
+  }, [images]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
-    <main>
-      <header className="pt-16 z-10 relative max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <h3 className="text-2xl sm:text-4xl leading-none font-bold tracking-tight text-purple-200">
-          <span className="text-[gold] opacity-75">Vital</span> @ Vite Template
-        </h3>
-        <h1 className="text-6xl lg:text-7xl leading-none font-extrabold tracking-tight mb-8 sm:mb-10 text-purple-400">
-          React + TypeScript + Tailwind
-        </h1>
-        <p className="max-w-screen-lg text-lg sm:text-xl  text-gray-300 font-medium mb-10 sm:mb-11">
-          Bootssdafasdfsdfaster than ever. Comes with:{" "}
-          <code className="font-mono text-blue-500 font-bold">CSS-Modules</code>
-          , <code className="font-mono text-blue-500 font-bold">Jest</code>,{" "}
-          <code className="font-mono text-blue-500 font-bold">Husky</code>,{" "}
-          <code className="font-mono text-blue-500 font-bold">Commit-lint</code>
-          , <code className="font-mono text-blue-500 font-bold">ESLint</code>,{" "}
-          and{" "}
-          <code className="font-mono text-blue-500 font-bold">
-            Atomic organization for components
-          </code>
-          . Configured and ready to go.
-        </p>
-        <div className="absolute top-12 right-12 opacity-10 lg:opacity-50">
-          <Logos.Vite className="w-56 h-56" />
+    <main
+      className="relative min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
+      <header className="relative z-10 max-w-screen-lg xl:max-w-screen-xl mx-auto">
+        <form
+          onSubmit={handleSearchSubmit}
+          className="flex justify-center mb-10 pt-16"
+        >
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder="Search for images..."
+            className="p-2 w-full max-w-lg text-xl rounded-l-lg"
+          />
+          <button
+            type="submit"
+            className="p-2 bg-blue-500 text-white text-xl rounded-r-lg"
+          >
+            Search
+          </button>
+        </form>
+        {loading && <p className="text-white text-center">Loading...</p>}
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 relative z-10">
+          {images.slice(1).map((image) => (
+            <Card key={image.id} image={image} />
+          ))}
         </div>
       </header>
     </main>
   );
-}
+};
 
 export default App;
