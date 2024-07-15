@@ -17,7 +17,7 @@ const useUnsplashImages = (query: string) => {
         const response = await axios.get(
           `https://api.unsplash.com/search/photos`,
           {
-            params: { query, per_page: 10 },
+            params: { query, per_page: 20 },
             headers: {
               Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
             },
