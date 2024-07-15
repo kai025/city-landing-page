@@ -1,5 +1,5 @@
 import React from "react";
-import { UnsplashImage } from "types/types";
+import { UnsplashImage } from "hooks/types";
 
 interface CardProps {
   image: UnsplashImage;
