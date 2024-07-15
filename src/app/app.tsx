@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import useUnsplashImages from "hooks/getImages";
 import Card from "components/common/Card";
+import Masonry from "react-masonry-css";
+import "./app.css"; // Add any custom CSS for Masonry here
 
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("nature");
@@ -19,6 +21,13 @@ const App: React.FC = () => {
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+  };
+
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
   };
 
   return (
@@ -47,11 +56,15 @@ const App: React.FC = () => {
         </form>
         {loading && <p className="text-white text-center">Loading...</p>}
         {error && <p className="text-red-500 text-center">{error}</p>}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 relative z-10">
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className="my-masonry-grid"
+          columnClassName="my-masonry-grid_column"
+        >
           {images.slice(1).map((image) => (
             <Card key={image.id} image={image} />
           ))}
-        </div>
+        </Masonry>
       </header>
     </main>
   );

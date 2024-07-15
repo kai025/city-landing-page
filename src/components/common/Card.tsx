@@ -1,5 +1,5 @@
 import React from "react";
-import { UnsplashImage } from "hooks/types";
+import { UnsplashImage } from "types/types";
 
 interface CardProps {
   image: UnsplashImage;
@@ -7,13 +7,15 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ image }) => {
   return (
-    <div className="bg-white bg-opacity-75 p-4 rounded-lg">
+    <div className="relative bg-white rounded-lg overflow-hidden">
       <img
         src={image.urls.small}
         alt={image.alt_description}
-        className="rounded-lg"
+        className="w-full h-auto"
       />
-      <p className="mt-2 text-gray-700">{image.alt_description}</p>
+      <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 w-full text-white p-2">
+        <p className="text-sm">{image.alt_description}</p>
+      </div>
     </div>
   );
 };
