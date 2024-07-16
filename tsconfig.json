@@ -24,8 +24,9 @@
       "app/*": ["src/app/*"],
       "components/*": ["src/components/*"],
       "hooks/*": ["src/hooks/*"]
-    }
+    },
+    "types": ["vite/client", "react", "react-dom"]
   },
-  "include": ["src"],
+  "include": ["src", "@types/node", "src/vite-env.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

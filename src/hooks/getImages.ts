@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { UnsplashImage } from "./types";
-
-const UNSPLASH_ACCESS_KEY = "BUwoZw5adQUtkW1SUN9h0QAAo1oE-4ymeolMQH4B1g0";
+import type { UnsplashImage } from "./types";
 
 const useUnsplashImages = (query: string) => {
   const [images, setImages] = useState<UnsplashImage[]>([]);
@@ -15,11 +13,13 @@ const useUnsplashImages = (query: string) => {
       setError(null);
       try {
         const response = await axios.get(
-          `https://api.unsplash.com/search/photos`,
+          "https://api.unsplash.com/search/photos",
           {
             params: { query, per_page: 20 },
             headers: {
-              Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
+              Authorization: `Client-ID ${
+                import.meta.env.VITE_UNSPLASH_ACCESS_KEY
+              }`,
             },
           }
         );

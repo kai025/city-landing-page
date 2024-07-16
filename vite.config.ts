@@ -1,9 +1,11 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import { resolve } from "path";
 import react from "@vitejs/plugin-react";
 
-export default defineConfig((configEnv) => {
-  const isDevelopment = configEnv.mode === "development";
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd());
+
+  const isDevelopment = env.VITE_ENV === "development";
 
   return {
     plugins: [react()],
