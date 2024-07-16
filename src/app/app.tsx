@@ -8,7 +8,7 @@ const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("nature");
   const { images, loading, error } = useUnsplashImages(searchTerm);
   const [backgroundImage, setBackgroundImage] = useState<string>("");
-  sfsdf;
+
   useEffect(() => {
     if (images.length > 0) {
       setBackgroundImage(images[0].urls.full);
