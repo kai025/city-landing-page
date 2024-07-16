@@ -2,18 +2,27 @@ import React, { useState, useEffect } from "react";
 import SearchIcon from "assets/icons/compass.svg";
 import LoadingIcon from "assets/icons/loading.svg";
 import useUnsplashImages from "hooks/getImages";
+import useUserLocation from "hooks/getLocation"; // Import the custom hook
 import Card from "components/common/Card";
 import Masonry from "react-masonry-css";
 import "./app.css"; // Add any custom CSS for Masonry here
 
 const App: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("nature");
-  const [searchQuery, setSearchQuery] = useState<string>("nature"); // New state for the actual search query
-  const { images, loading, error } = useUnsplashImages(searchQuery); // Use searchQuery instead of searchTerm
+  const { location, error: locationError } = useUserLocation(); // Use the custom hook
+  const [searchTerm, setSearchTerm] = useState<string>(location || "nature");
+  const [searchQuery, setSearchQuery] = useState<string>(location || "nature");
+  const { images, loading, error } = useUnsplashImages(searchQuery);
   const [backgroundImage, setBackgroundImage] = useState<string>("");
   const [paddingPixel, setPaddingPixel] = useState<number>(
     window.innerHeight * 0.3
   );
+
+  useEffect(() => {
+    if (location) {
+      setSearchTerm(location);
+      setSearchQuery(location);
+    }
+  }, [location]);
 
   useEffect(() => {
     if (images.length > 0) {
@@ -37,7 +46,7 @@ const App: React.FC = () => {
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSearchQuery(searchTerm); // Update the search query state
+    setSearchQuery(searchTerm);
   };
 
   const breakpointColumnsObj = {
@@ -68,16 +77,19 @@ const App: React.FC = () => {
               value={searchTerm}
               onChange={handleSearchChange}
               placeholder="Search for images..."
-              className="p-2 w-full text-xl rounded-l-full rounded-r-full"
+              className="p-2 w-full text-xl rounded-l-full rounded-r-full text-gray"
             />
             <button
               type="submit"
-              className="absolute right-8 p-2 text-xl rounded-r-full flex items-center justify-center h-full w-9 text-tahiti-700  hover:text-tahiti-300"
+              className="absolute right-8 p-2 text-xl rounded-r-full flex items-center justify-center h-full w-9 text-tahiti-700 hover:text-tahiti-300"
             >
               {loading ? <LoadingIcon /> : <SearchIcon />}
             </button>
           </div>
         </form>
+        {locationError && (
+          <p className="text-red-500 text-center">{locationError}</p>
+        )}
         {error && <p className="text-red-500 text-center">{error}</p>}
         <Masonry
           breakpointCols={breakpointColumnsObj}
