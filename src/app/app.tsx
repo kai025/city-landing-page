@@ -51,27 +51,28 @@ const App: React.FC = () => {
 
   const breakpointColumnsObj = {
     default: 4,
-    1100: 3,
-    700: 2,
+    1600: 4,
+    1400: 3,
+    800: 2,
     500: 1,
   };
 
   return (
     <main
-      className="relative min-h-screen bg-cover bg-center"
+      className="relative min-h-screen bg-cover bg-center "
       style={{
         backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.5) 20%, rgba(0,0,0,1) 35%), url(${backgroundImage})`,
       }}
     >
       <header
-        className="relative z-10 max-w-screen-lg xl:max-w-screen-xl mx-auto"
+        className="relative z-10 max-w-[1700px] flex flex-col items-center justify-center mx-auto"
         style={{ paddingTop: `${paddingPixel}px` }}
       >
         <form
           onSubmit={handleSearchSubmit}
-          className="flex justify-center mb-12"
+          className="flex justify-center mb-8 max-w-screen-lg w-full "
         >
-          <div className="relative w-full max-w-screen-lg flex items-center px-8">
+          <div className="relative w-full  flex items-center px-8">
             <input
               type="text"
               value={searchTerm}
@@ -93,7 +94,7 @@ const App: React.FC = () => {
         {error && <p className="text-red-500 text-center">{error}</p>}
         <Masonry
           breakpointCols={breakpointColumnsObj}
-          className="my-masonry-grid px-6"
+          className="my-masonry-grid"
           columnClassName="my-masonry-grid_column"
         >
           {images.slice(1).map((image) => (

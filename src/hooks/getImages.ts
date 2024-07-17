@@ -23,7 +23,22 @@ const useUnsplashImages = (query: string) => {
             },
           }
         );
-        setImages(response.data.results);
+
+        // Transform the data into the desired format
+        const transformedImages: UnsplashImage[] = response.data.results.map(
+          (image: any) => ({
+            id: image.id,
+            alt_description: image.alt_description || "No description",
+            name: image.user.name,
+            profileImage: image.user.profile_image.small,
+            urls: {
+              full: image.urls.full,
+              small: image.urls.small,
+            },
+          })
+        );
+
+        setImages(transformedImages);
       } catch (error) {
         setError("Error fetching images from Unsplash.");
       } finally {
