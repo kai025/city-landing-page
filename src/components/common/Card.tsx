@@ -30,7 +30,7 @@ const Card: React.FC<CardProps> = ({ image }) => {
           <span className=" text-sm">90% Match</span>
         </div>
       </div>
-      <div className="absolute bottom-2 left-0 w-full px-4 pb-4 ">
+      <div className="absolute bottom-2 left-0 w-full px-4 pb-2 ">
         <p className="font-medium text-lg line-clamp-2">
           {image.alt_description}
         </p>
