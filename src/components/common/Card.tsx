@@ -7,7 +7,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ image }) => {
   return (
-    <div className="relative bg-white rounded-2xl overflow-hidden sm:w-full md:w-[350px] shadow-lg">
+    <div className="relative bg-white rounded-2xl overflow-hidden sm:w-full md:w-[350px] shadow-lg hover:shadow-lg hover:shadow-brandblue active:shadow-lg active:shadow-brandgold">
       <div className="relative">
         <img
           src={image.urls.small}
