@@ -81,7 +81,7 @@ const App: React.FC = () => {
             />
             <button
               type="submit"
-              className="absolute right-8 p-2 text-xl rounded-r-full flex items-center justify-center h-full w-9 text-tahiti-700 hover:text-tahiti-300"
+              className="absolute right-8 p-2 text-xl rounded-r-full flex items-center justify-center h-full w-9 text-brandblue hover:text-brandgold"
             >
               {loading ? <LoadingIcon /> : <SearchIcon />}
             </button>

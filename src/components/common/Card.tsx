@@ -1,11 +1,15 @@
-import React from "react";
-import { UnsplashImage } from "hooks/types";
+import React, { useState } from "react";
+import type { UnsplashImage } from "hooks/types";
+import HeartIcon from "assets/icons/heart.svg";
+import HeartFilledIcon from "assets/icons/heartfilled.svg";
 
 interface CardProps {
   image: UnsplashImage;
 }
 
 const Card: React.FC<CardProps> = ({ image }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div className="relative bg-white rounded-3xl overflow-hidden sm:w-full md:w-[450px] shadow-lg hover:shadow-md hover:shadow-brandblue active:shadow-lg active:shadow-brandgold">
       <div className="relative">
@@ -23,11 +27,17 @@ const Card: React.FC<CardProps> = ({ image }) => {
                 className="w-7 h-7 rounded-full"
               />
             )}
-            <span className="text-xs line-clamp-2 max-w-[90px] text-white">
+            <span className="text-sm font-medium line-clamp-2 max-w-[90px] text-white">
               {image.name}
             </span>
           </div>
-          <span className="text-sm text-brandblue">90% Match</span>
+          <div
+            className="w-6 h-6 text-white"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            {isHovered ? <HeartFilledIcon /> : <HeartIcon />}
+          </div>
         </div>
       </div>
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black to-transparent" />

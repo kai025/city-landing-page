@@ -5,6 +5,10 @@
 Just run and visit http://127.0.0.1:3000/
 
 ```bash
+yarn
+```
+
+```bash
 yarn dev
 ```
 
@@ -18,15 +22,8 @@ yarn build
 
 And you will see the generated file in `dist` that ready to be served.
 
-### Deploy on Netlify
+### Deploy on Vercel
 
-Go to [Netlify](https://app.netlify.com/start) and select your repository, `OK` along the way, and your App will be live in a minute.
+Go to Vercel and create a new Vite project, no extra setting needed
 
 ### Issues
-
-#### Husky
-
-If pre-commit hooks are not working be sure that you have installed husky: `husky install`.
-
-By default this command should be triggered after yarn/npm deps are installed.
-
