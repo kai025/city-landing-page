@@ -40,7 +40,7 @@ const Card: React.FC<CardProps> = ({ image }) => {
           </div>
         </div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black to-transparent" />
       <div className="absolute bottom-4 left-0 w-full px-5 pb-2">
         <p className="font-medium text-xl text-white line-clamp-2">
           {image.alt_description}
