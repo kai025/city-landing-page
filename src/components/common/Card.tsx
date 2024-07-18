@@ -7,14 +7,14 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ image }) => {
   return (
-    <div className="relative bg-white rounded-2xl overflow-hidden sm:w-full md:w-[350px] shadow-lg hover:shadow-md hover:shadow-brandblue active:shadow-lg active:shadow-brandgold">
+    <div className="relative bg-white rounded-3xl overflow-hidden sm:w-full md:w-[450px] shadow-lg hover:shadow-md hover:shadow-brandblue active:shadow-lg active:shadow-brandgold">
       <div className="relative">
         <img
           src={image.urls.small}
           alt={image.alt_description}
           className="w-full h-auto"
         />
-        <div className="w-full absolute top-4 flex items-center space-x-2 justify-between px-4">
+        <div className="w-full absolute top-4 flex items-center space-x-2 justify-between px-5">
           <div className="flex items-center space-x-2">
             {image.profileImage && (
               <img
@@ -23,15 +23,16 @@ const Card: React.FC<CardProps> = ({ image }) => {
                 className="w-7 h-7 rounded-full"
               />
             )}
-            <span className=" text-xs line-clamp-2 max-w-[90px]">
+            <span className="text-xs line-clamp-2 max-w-[90px] text-white">
               {image.name}
             </span>
           </div>
-          <span className=" text-sm">90% Match</span>
+          <span className="text-sm text-brandblue">90% Match</span>
         </div>
       </div>
-      <div className="absolute bottom-2 left-0 w-full px-4 pb-2 ">
-        <p className="font-medium text-lg line-clamp-2">
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black to-transparent" />
+      <div className="absolute bottom-4 left-0 w-full px-5 pb-2">
+        <p className="font-medium text-xl text-white line-clamp-2">
           {image.alt_description}
         </p>
       </div>
