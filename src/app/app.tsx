@@ -1,20 +1,21 @@
-import type React from "react";
-import { useState, useEffect } from "react";
-import useUserLocation from "hooks/getLocation"; // Import the custom hook for location
+import React, { useState, useEffect } from "react";
+import useUserLocation from "hooks/getLocation";
 import type { BlogData } from "hooks/types";
-import { blogData } from "hooks/data"; // Import the blog data
+import { blogData } from "hooks/data";
 import Masonry from "react-masonry-css";
-import Card from "components/common/Card"; // Assume this component will be adapted to handle blog data
-import "./app.css"; // Add any custom CSS for Masonry here
+import Card from "components/common/Card";
+import "./app.css";
 import SearchIcon from "assets/icons/compass.svg";
+import MapComponent from "components/common/GoogleMap";
 
 const App: React.FC = () => {
-  const { location, error: locationError } = useUserLocation(); // Use the custom hook
+  const { location, error: locationError } = useUserLocation();
   const [searchTerm, setSearchTerm] = useState<string>("Berlin");
   const [filteredBlogs, setFilteredBlogs] = useState<BlogData>(blogData);
   const [paddingPixel, setPaddingPixel] = useState<number>(
     window.innerHeight * 0.3
   );
+
   useEffect(() => {
     const handleResize = () => {
       setPaddingPixel(window.innerHeight * 0.3);
@@ -49,39 +50,56 @@ const App: React.FC = () => {
   };
 
   return (
-    <main
-      className="relative min-h-screen bg-cover bg-center "
-      style={{
-        backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.5) 20%, rgba(0,0,0,1) 35%), url('https://destinationwellknown.com/wp-content/uploads/2022/10/berlin-city.jpg')`,
-      }}
-    >
-      <header
-        className="relative z-10 max-w-[1700px] flex flex-col items-center justify-center mx-auto"
-        style={{ paddingTop: `${paddingPixel}px` }}
-      >
-        <form
-          onSubmit={handleSearchSubmit}
-          className="flex justify-center mb-8 max-w-screen-lg w-full "
+    <main className="relative min-h-screen bg-black">
+      <header className="relative w-full" style={{ height: "66vh" }}>
+        <div className="absolute inset-0">
+          <MapComponent />
+        </div>
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 80%, rgba(0, 0, 0, 1) 100%)",
+          }}
+        />
+        <div
+          className="absolute bottom-0 left-0 right-0 mx-auto"
+          style={{ paddingBottom: `${paddingPixel / 4}px` }}
         >
-          <div className="relative w-full flex items-center px-8">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              placeholder="Search for blogs..."
-              className="p-2 w-full text-xl rounded-l-full rounded-r-full text-gray"
-            />
-            <button
-              type="submit"
-              className="absolute right-8 p-2 w-9 text-xl rounded-r-full flex items-center justify-center h-full w-6 text-brandblue hover:text-brandgold"
-            >
-              <SearchIcon />
-            </button>
-          </div>
-        </form>
-        {locationError && (
-          <p className="text-red-500 text-center">{locationError}</p>
-        )}
+          <form
+            onSubmit={handleSearchSubmit}
+            className="flex justify-center mb-4 max-w-screen-lg w-full mx-auto"
+          >
+            <div className="relative w-full flex items-center px-8">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                placeholder="Search for blogs..."
+                className="p-2 w-full text-xl rounded-l-full rounded-r-full text-gray"
+              />
+              <button
+                type="submit"
+                className="absolute right-8 p-2 text-xl rounded-r-full flex items-center justify-center h-full w-9 text-brandblue hover:text-brandgold"
+              >
+                <SearchIcon />
+              </button>
+            </div>
+          </form>
+          {locationError && (
+            <p className="text-red-500 text-center">{locationError}</p>
+          )}
+        </div>
+      </header>
+
+      <section
+        className="relative z-10 flex flex-col items-center justify-center mx-auto pt-2"
+        style={{
+          backgroundColor: "black",
+          color: "white",
+          minHeight: "34vh",
+        }}
+      >
         <Masonry
           breakpointCols={breakpointColumnsObj}
           className="my-masonry-grid"
@@ -98,7 +116,7 @@ const App: React.FC = () => {
             </div>
           ))}
         </Masonry>
-      </header>
+      </section>
     </main>
   );
 };
