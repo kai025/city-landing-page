@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useUserLocation from "hooks/getLocation";
 import type { BlogData } from "hooks/types";
 import { blogData } from "hooks/data";
@@ -6,7 +6,13 @@ import Masonry from "react-masonry-css";
 import Card from "components/common/Card";
 import "./app.css";
 import SearchIcon from "assets/icons/search.svg";
+import PlusIcon from "assets/icons/plus.svg";
+import MinusIcon from "assets/icons/minus.svg";
 import MapComponent from "components/common/GoogleMap";
+import {
+  ScrollWheelLeft,
+  ScrollWheelRight,
+} from "components/common/ScrollWheel";
 
 const App: React.FC = () => {
   const { location, error: locationError } = useUserLocation();
@@ -15,6 +21,7 @@ const App: React.FC = () => {
   const [paddingPixel, setPaddingPixel] = useState<number>(
     window.innerHeight * 0.3
   );
+  const mapRef = useRef<google.maps.Map | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -42,6 +49,18 @@ const App: React.FC = () => {
     setFilteredBlogs(filtered);
   };
 
+  const handleZoomIn = () => {
+    if (mapRef.current) {
+      mapRef.current.setZoom(mapRef.current.getZoom() + 1);
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (mapRef.current) {
+      mapRef.current.setZoom(mapRef.current.getZoom() - 1);
+    }
+  };
+
   const breakpointColumnsObj = {
     default: 3,
     1400: 3,
@@ -53,37 +72,42 @@ const App: React.FC = () => {
     <main className="relative min-h-screen bg-black">
       <header className="relative w-full" style={{ height: "60vh" }}>
         <div className="absolute inset-0">
-          <MapComponent />
+          <MapComponent setMap={(map) => (mapRef.current = map)} />
         </div>
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 80%, rgba(0, 0, 0, 1) 100%)",
+              "linear-gradient(to bottom, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 1) 100%)",
           }}
         />
-        {/* Move the search bar to the top and make it 50% opaque */}
-        <div className="absolute top-0 left-0 right-0 mx-auto mt-4 w-full max-w-screen-lg">
-          <form
-            onSubmit={handleSearchSubmit}
-            className="flex justify-center w-full mx-auto"
-          >
-            <div className="relative w-full flex items-center px-8">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                placeholder="Search for blogs..."
-                className="py-1 px-4 w-full text-xl rounded-l-full rounded-r-full text-white bg-white bg-opacity-40" // Added bg-opacity-50 for 50% opacity
-              />
-              <button
-                type="submit"
-                className="absolute right-8 p-2 text-xl rounded-r-full flex items-center justify-center h-full w-7 text-brandblue hover:text-brandgold opacity-70 mr-2"
-              >
-                <SearchIcon />
-              </button>
-            </div>
-          </form>
+        <div className="absolute top-0 left-0 right-0 mx-auto mt-4 w-full max-w-screen-lg flex items-center justify-center">
+          <div className="flex items-center justify-between space-x-4 w-full">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="flex justify-center w-full mx-auto"
+            >
+              <div className="relative w-full flex items-center px-8">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  placeholder="Search for blogs..."
+                  className="py-1 px-4 w-full text-xl rounded-l-full rounded-r-full text-white bg-white bg-opacity-40"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-8 p-2 text-xl rounded-r-full flex items-center justify-center h-full w-7 text-brandblue hover:text-brandgold opacity-70 mr-2"
+                >
+                  <SearchIcon />
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div className="justify-between w-full">
+          <ScrollWheelLeft />
+          <ScrollWheelRight />
         </div>
       </header>
 

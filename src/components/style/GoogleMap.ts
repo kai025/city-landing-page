@@ -3,7 +3,7 @@ export const mapStyle = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#1e303d",
+        color: "#336c63", // Darker blue background
       },
     ],
   },
@@ -11,7 +11,7 @@ export const mapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#c0c0c0",
+        color: "#8ec3b9", // Light grey labels
       },
     ],
   },
@@ -19,7 +19,7 @@ export const mapStyle = [
     elementType: "labels.text.stroke",
     stylers: [
       {
-        color: "#1a3646",
+        color: "#1a3646", // Darker stroke for text
       },
     ],
   },
@@ -28,7 +28,7 @@ export const mapStyle = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#2a3f54",
+        color: "#1a2b48", // Slightly different dark blue for borders
       },
     ],
   },
@@ -37,7 +37,7 @@ export const mapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#6b9a76",
+        color: "#6b9a76", // Subtle green for country labels
       },
     ],
   },
@@ -46,25 +46,20 @@ export const mapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#64779e",
+        color: "#64779e", // Neutral blue-grey for land parcels
       },
     ],
   },
   {
     featureType: "administrative.locality",
     elementType: "labels.text.fill",
-    stylers: [
-      {
-        color: "#c0c0c0",
-      },
-    ],
   },
   {
     featureType: "poi",
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#e77e24",
+        color: "#64779e", // Orange color for points of interest
       },
     ],
   },
@@ -73,7 +68,7 @@ export const mapStyle = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#304a7d",
+        color: "#304a7d", // Darker blue for roads
       },
     ],
   },
@@ -82,7 +77,7 @@ export const mapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#98a5be",
+        color: "#98a5be", // Light blue-grey for road labels
       },
     ],
   },
@@ -91,7 +86,7 @@ export const mapStyle = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#2c6675",
+        color: "#2c6675", // Slightly darker for highways
       },
     ],
   },
@@ -100,7 +95,7 @@ export const mapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#8ec3b9",
+        color: "#8ec3b9", // Light cyan for transit labels
       },
     ],
   },
@@ -109,7 +104,7 @@ export const mapStyle = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#0e1626",
+        color: "#17263c", // Dark blue for water bodies
       },
     ],
   },
@@ -118,7 +113,7 @@ export const mapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#4e6d70",
+        color: "#4e6d70", // Grey-blue for water labels
       },
     ],
   },
