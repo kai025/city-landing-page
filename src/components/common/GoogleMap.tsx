@@ -42,9 +42,7 @@ const MapComponent: React.FC<{ setMap: (map: google.maps.Map) => void }> = ({
       zoom={12}
       options={mapOptions}
       onLoad={onLoad}
-    >
-      {/* Add markers or other components if needed */}
-    </GoogleMap>
+    />
   );
 };
 

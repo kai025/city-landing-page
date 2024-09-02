@@ -113,4 +113,34 @@ export const mapStyle: google.maps.MapTypeStyle[] = [
       },
     ],
   },
+  // Remove POI labels (including shopping malls and other POIs)
+  {
+    featureType: "poi",
+    elementType: "labels",
+    stylers: [
+      {
+        visibility: "off", // Turn off labels for POIs
+      },
+    ],
+  },
+  // Remove POI icons
+  {
+    featureType: "poi",
+    elementType: "geometry",
+    stylers: [
+      {
+        visibility: "off", // Turn off icons for POIs
+      },
+    ],
+  },
+  // Specifically targeting shopping malls (optional)
+  {
+    featureType: "poi.business",
+    elementType: "labels",
+    stylers: [
+      {
+        visibility: "off", // Turn off labels for businesses like shopping malls
+      },
+    ],
+  },
 ];
