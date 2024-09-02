@@ -73,7 +73,7 @@ const App: React.FC = () => {
             />
             <button
               type="submit"
-              className="absolute right-8 p-2 text-xl rounded-r-full flex items-center justify-center h-full w-6 text-brandblue hover:text-brandgold"
+              className="absolute right-8 p-2 w-9 text-xl rounded-r-full flex items-center justify-center h-full w-6 text-brandblue hover:text-brandgold"
             >
               <SearchIcon />
             </button>
