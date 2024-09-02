@@ -5,7 +5,7 @@ import { blogData } from "hooks/data";
 import Masonry from "react-masonry-css";
 import Card from "components/common/Card";
 import "./app.css";
-import SearchIcon from "assets/icons/compass.svg";
+import SearchIcon from "assets/icons/search.svg";
 import MapComponent from "components/common/GoogleMap";
 
 const App: React.FC = () => {
@@ -51,7 +51,7 @@ const App: React.FC = () => {
 
   return (
     <main className="relative min-h-screen bg-black">
-      <header className="relative w-full" style={{ height: "66vh" }}>
+      <header className="relative w-full" style={{ height: "60vh" }}>
         <div className="absolute inset-0">
           <MapComponent />
         </div>
@@ -62,13 +62,11 @@ const App: React.FC = () => {
               "linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 80%, rgba(0, 0, 0, 1) 100%)",
           }}
         />
-        <div
-          className="absolute bottom-0 left-0 right-0 mx-auto"
-          style={{ paddingBottom: `${paddingPixel / 4}px` }}
-        >
+        {/* Move the search bar to the top and make it 50% opaque */}
+        <div className="absolute top-0 left-0 right-0 mx-auto mt-4 w-full max-w-screen-lg">
           <form
             onSubmit={handleSearchSubmit}
-            className="flex justify-center mb-4 max-w-screen-lg w-full mx-auto"
+            className="flex justify-center w-full mx-auto"
           >
             <div className="relative w-full flex items-center px-8">
               <input
@@ -76,33 +74,30 @@ const App: React.FC = () => {
                 value={searchTerm}
                 onChange={handleSearchChange}
                 placeholder="Search for blogs..."
-                className="p-2 w-full text-xl rounded-l-full rounded-r-full text-gray"
+                className="py-1 px-4 w-full text-xl rounded-l-full rounded-r-full text-white bg-white bg-opacity-40" // Added bg-opacity-50 for 50% opacity
               />
               <button
                 type="submit"
-                className="absolute right-8 p-2 text-xl rounded-r-full flex items-center justify-center h-full w-9 text-brandblue hover:text-brandgold"
+                className="absolute right-8 p-2 text-xl rounded-r-full flex items-center justify-center h-full w-7 text-brandblue hover:text-brandgold opacity-70 mr-2"
               >
                 <SearchIcon />
               </button>
             </div>
           </form>
-          {locationError && (
-            <p className="text-red-500 text-center">{locationError}</p>
-          )}
         </div>
       </header>
 
       <section
-        className="relative z-10 flex flex-col items-center justify-center mx-auto pt-2"
+        className="relative z-10 flex flex-col items-center justify-center mx-auto"
         style={{
           backgroundColor: "black",
           color: "white",
-          minHeight: "34vh",
+          minHeight: "30vh",
         }}
       >
         <Masonry
           breakpointCols={breakpointColumnsObj}
-          className="my-masonry-grid"
+          className="my-masonry-grid -mt-10"
           columnClassName="my-masonry-grid_column"
         >
           {filteredBlogs.map((blog, index) => (
