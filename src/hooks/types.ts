@@ -8,3 +8,12 @@ export interface UnsplashImage {
     small: string;
   };
 }
+
+export interface BlogEntry {
+  city: string;
+  title: string;
+  url: string;
+  image?: string;
+}
+
+export type BlogData = BlogEntry[];
