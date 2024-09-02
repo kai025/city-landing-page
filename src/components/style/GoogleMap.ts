@@ -1,4 +1,4 @@
-export const mapStyle = [
+export const mapStyle: google.maps.MapTypeStyle[] = [
   {
     elementType: "geometry",
     stylers: [
@@ -53,13 +53,9 @@ export const mapStyle = [
   {
     featureType: "administrative.locality",
     elementType: "labels.text.fill",
-  },
-  {
-    featureType: "poi",
-    elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#64779e", // Orange color for points of interest
+        color: "#d1d1d1", // Lighter grey for locality labels
       },
     ],
   },

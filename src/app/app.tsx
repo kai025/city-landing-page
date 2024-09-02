@@ -48,19 +48,6 @@ const App: React.FC = () => {
     );
     setFilteredBlogs(filtered);
   };
-
-  const handleZoomIn = () => {
-    if (mapRef.current) {
-      mapRef.current.setZoom(mapRef.current.getZoom() + 1);
-    }
-  };
-
-  const handleZoomOut = () => {
-    if (mapRef.current) {
-      mapRef.current.setZoom(mapRef.current.getZoom() - 1);
-    }
-  };
-
   const breakpointColumnsObj = {
     default: 3,
     1400: 3,
@@ -72,6 +59,7 @@ const App: React.FC = () => {
     <main className="relative min-h-screen bg-black">
       <header className="relative w-full" style={{ height: "60vh" }}>
         <div className="absolute inset-0">
+          {/* biome-ignore lint/suspicious/noAssignInExpressions: <explanation> */}
           <MapComponent setMap={(map) => (mapRef.current = map)} />
         </div>
         <div
