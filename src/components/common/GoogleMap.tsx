@@ -42,10 +42,10 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
               clickable={true}
               onClick={() => handleMarkerClick(blog.title)}
             >
-              <Pin
-                background={"#1a2b48"}
-                borderColor={"#1a2b48"}
-                glyphColor={"#ffffff"}
+              <img
+                src="https://www.svgrepo.com/show/469486/pin-drop.svg"
+                alt="Pin"
+                className="w-8 h-8"
               />
             </AdvancedMarker>
           ))
