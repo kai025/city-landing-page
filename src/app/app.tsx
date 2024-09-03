@@ -82,7 +82,7 @@ const App: React.FC = () => {
             <Logo />
           </div>
           <div className="z-50 flex items-center -mt-1 px-2">
-            <span className="text-white  text-xl">Explore</span>
+            <span className="text-white opacity-60 text-xl">Explore</span>
           </div>
           <form
             onSubmit={handleSearchSubmit}
