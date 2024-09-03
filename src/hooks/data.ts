@@ -3,7 +3,6 @@ import type { BlogData } from "hooks/types";
 export const blogData: BlogData = [
   {
     city: "Berlin",
-    category: ["tour_guides"],
     title: "Locals' Secrets: How to See Berlin in a Weekend",
     url: "https://notanomadblog.com/2-days-in-berlin-itinerary/",
     markers: [
@@ -23,7 +22,6 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
-    category: ["tour_guides"],
     title: "What was the best thing you did in Berlin",
     url: "https://community.ricksteves.com/travel-forum/germany/what-was-the-best-thing-you-did-in-berlin",
     markers: [
@@ -32,7 +30,6 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
-    category: ["tour_guides"],
     title: "Things To Do On Your First Trip To Berlin",
     url: "https://www.wanderlustchloe.com/berlin-things-to-do/",
     image:
@@ -51,7 +48,6 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
-    category: ["tour_guides"],
     title: "The 18 Best Things To Do in Berlin (Updated 2024)",
     url: "https://www.nomadicmatt.com/travel-blogs/things-to-do-berlin/",
     image: "https://media.nomadicmatt.com/berlineastsidegallery.jpg",
@@ -61,7 +57,6 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
-    category: ["tour_guides"],
     title: "How to Spend 4 days in Berlin - A Local's Guide",
     url: "https://goaskalocal.com/blog/berlin-germany-itinerary",
     image:
@@ -72,7 +67,6 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
-    category: ["tour_guides"],
     title: "How To Spend One Week In Berlin - The Ultimate Guide",
     url: "https://theunexploredbackyard.com/one-week-in-berlin/",
     image:
@@ -297,5 +291,35 @@ export const blogData: BlogData = [
     url: "https://www.hoppa.com/en/discover/things-to-do/berlin",
     image:
       "https://www.hoppa.com/_next/image?url=https%3A%2F%2Fcms.hoppa.com%2F%2Fuploads%2Funusual_things_to_do_in_berlin_f171a72f1b.jpg&w=1200&q=30",
+  },
+  {
+    city: "Berlin",
+    category: ["tour_guides"],
+    title: "Viator Berlin Tour Guide",
+    url: "https://www.viator.com/",
+    image:
+      "https://media.tacdn.com/media/attractions-splice-spp-360x240/0f/fc/78/53.jpg",
+    markers: [
+      { lat: 52.51, lng: 13.32 }, // Near Kurfürstendamm
+    ],
+  },
+  {
+    city: "Berlin",
+    category: ["tour_guides"],
+    title: "Berlin Food Walking Tour With Secret Food Tour Guide",
+    url: "https://www.viator.com/tours/Berlin/Small-Group-3-Hour-East-Berlin-Food-Walking-Tour/d488-7812P7",
+    image:
+      "https://media.tacdn.com/media/attractions-splice-spp-674x446/12/6a/c7/57.jpg",
+  },
+  {
+    city: "Berlin",
+    category: ["tour_guides"],
+    title: "Explore Berlin's Top Attractions 3-hour English Walking Tour",
+    url: "https://www.viator.com/tours/Berlin/Berlin-Highlights-and-Hidden-Sites-Historical-Walking-Tour/d488-5560HIGHLIGHTS",
+    image:
+      "https://media.tacdn.com/media/attractions-splice-spp-674x446/0e/49/e4/96.jpg",
+    markers: [
+      { lat: 52.515339, lng: 13.387188 }, // Near Friedrichstraße
+    ],
   },
 ];
