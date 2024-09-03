@@ -2,7 +2,7 @@ import "app/app.css";
 
 export const ScrollWheelLeft: React.FC = () => {
   return (
-    <div className="scroll-wheel-left z-40 text-white max-h-[300px]">
+    <div className="scroll-wheel-left z-40 text-white max-h-[300px] bg-black bg-opacity-40 rounded-xl  p-2">
       <ul>
         <li>Hotels</li>
         <li>Cruises</li>
@@ -16,7 +16,7 @@ export const ScrollWheelLeft: React.FC = () => {
 
 export const ScrollWheelRight: React.FC = () => {
   return (
-    <div className="scroll-wheel-right z-40 text-white max-h-[300px]">
+    <div className="scroll-wheel-right z-40 text-white max-h-[300px] bg-black bg-opacity-40 rounded-xl  p-2">
       <ul>
         <li>Mountains</li>
         <li>Lakes</li>

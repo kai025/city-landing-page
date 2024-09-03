@@ -25,9 +25,8 @@
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  padding: 10px 15px;
   border-radius: 10px;
-  overflow: hidden; /* Ensure the fading effect doesn't go outside the bounds */
+  overflow: hidden;
   z-index: 40;
 }
 
@@ -63,12 +62,7 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    #4aa8dd,
-    /* This is your brandblue */ transparent
-  );
+  background: linear-gradient(to bottom, transparent, #4aa8dd, transparent);
 }
 
 .scroll-wheel-left ul,
@@ -86,28 +80,23 @@
   font-size: 1.2rem;
   color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease; /* Add transition for the zoom effect */
 }
 
 .scroll-wheel-left li {
-  padding-left: 10px; /* Add some padding to the left to give space from the blue line */
+  padding-left: 5px; /* Add some padding to the left to give space from the blue line */
 }
 
 .scroll-wheel-right li {
-  padding-right: 10px; /* Add some padding to the right to give space from the blue line */
+  padding-right: 5px; /* Add some padding to the right to give space from the blue line */
 }
 
 .scroll-wheel-left li.active,
-.scroll-wheel-left li:hover {
-  color: #4aa8dd;
-  font-weight: bold;
-  transform: none; /* Prevent the text from moving when hovered */
-}
+.scroll-wheel-left li:hover,
 .scroll-wheel-right li.active,
 .scroll-wheel-right li:hover {
   color: #4aa8dd;
-  font-weight: bold;
-  transform: none; /* Prevent the text from moving when hovered */
+  transform: scale(1.05); /* Scale up the text to 1.2x size on hover */
 }
 
 .scroll-wheel-left ul,

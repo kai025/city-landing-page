@@ -14,6 +14,7 @@ export interface BlogEntry {
   title: string;
   url: string;
   image?: string;
+  markers?: { lat: number; lng: number }[];
 }
 
 export type BlogData = BlogEntry[];

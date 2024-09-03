@@ -19,7 +19,7 @@ export const mapStyle: google.maps.MapTypeStyle[] = [
     elementType: "labels.text.stroke",
     stylers: [
       {
-        color: "#1a3646", // Darker stroke for text
+        color: "#1a3646",
       },
     ],
   },

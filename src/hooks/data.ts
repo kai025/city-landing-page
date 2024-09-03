@@ -5,6 +5,10 @@ export const blogData: BlogData = [
     city: "Berlin",
     title: "Locals' Secrets: How to See Berlin in a Weekend",
     url: "https://notanomadblog.com/2-days-in-berlin-itinerary/",
+    markers: [
+      { lat: 52.520008, lng: 13.404954 }, // Near Brandenburg Gate
+      { lat: 52.512255, lng: 13.392341 }, // Near Checkpoint Charlie
+    ],
   },
   {
     city: "Berlin",
@@ -12,11 +16,17 @@ export const blogData: BlogData = [
     url: "https://nymag.com/strategist/article/berlin-germany-itinerary-things-to-do.html",
     image:
       "https://pyxis.nymag.com/v1/imgs/872/ed6/a1e8647ac66ecd00b25c373f4e3569d955-6-1-SMV.2x.rhorizontal.w1100.jpg",
+    markers: [
+      { lat: 52.531677, lng: 13.381777 }, // Near Berlin Wall Memorial
+    ],
   },
   {
     city: "Berlin",
     title: "What was the best thing you did in Berlin",
     url: "https://community.ricksteves.com/travel-forum/germany/what-was-the-best-thing-you-did-in-berlin",
+    markers: [
+      { lat: 52.507629, lng: 13.438152 }, // Near East Side Gallery
+    ],
   },
   {
     city: "Berlin",
@@ -24,17 +34,26 @@ export const blogData: BlogData = [
     url: "https://www.wanderlustchloe.com/berlin-things-to-do/",
     image:
       "https://www.wanderlustchloe.com/wp-content/uploads/2017/08/Berlin-1.jpg",
+    markers: [
+      { lat: 52.520006, lng: 13.377889 }, // Near Reichstag Building
+    ],
   },
   {
     city: "Berlin",
     title: "How to Spend Three Days in Berlin, Germany: My 2023 ...",
     url: "https://www.neverendingfootsteps.com/berlin-germany-itinerary/",
+    markers: [
+      { lat: 52.513191, lng: 13.415966 }, // Near Alexanderplatz
+    ],
   },
   {
     city: "Berlin",
     title: "The 18 Best Things To Do in Berlin (Updated 2024)",
     url: "https://www.nomadicmatt.com/travel-blogs/things-to-do-berlin/",
     image: "https://media.nomadicmatt.com/berlineastsidegallery.jpg",
+    markers: [
+      { lat: 52.519444, lng: 13.406667 }, // Near Museum Island
+    ],
   },
   {
     city: "Berlin",
@@ -42,6 +61,9 @@ export const blogData: BlogData = [
     url: "https://goaskalocal.com/blog/berlin-germany-itinerary",
     image:
       "https://images.squarespace-cdn.com/content/v1/609d3f1781f4a87463f238cb/1684247380747-RYQGP0DM9Q28G5SLX1ZH/image-asset.jpeg?format=2500w",
+    markers: [
+      { lat: 52.503625, lng: 13.341558 }, // Near Kurfürstendamm
+    ],
   },
   {
     city: "Berlin",
@@ -49,6 +71,9 @@ export const blogData: BlogData = [
     url: "https://theunexploredbackyard.com/one-week-in-berlin/",
     image:
       "https://theunexploredbackyard.com/wp-content/uploads/2023/02/one-week-in-berlin.png",
+    markers: [
+      { lat: 52.528846, lng: 13.394792 }, // Near Gesundbrunnen
+    ],
   },
   {
     city: "Berlin",
@@ -56,6 +81,9 @@ export const blogData: BlogData = [
     url: "https://wheatlesswanderlust.com/2-days-in-berlin-itinerary/",
     image:
       "https://wheatlesswanderlust.com/wp-content/uploads/2019/10/ac-almelor-9HiCRY11-CI-unsplash-1920x1080.jpg",
+    markers: [
+      { lat: 52.498252, lng: 13.388154 }, // Near Tempelhofer Feld
+    ],
   },
   {
     city: "Berlin",
@@ -63,16 +91,25 @@ export const blogData: BlogData = [
     url: "https://www.dreambigtravelfarblog.com/blog/one-day-in-berlin",
     image:
       "https://cdn.prod.website-files.com/576fd5a8f192527e50a4b95c/5e15c1be025e03fd4ff56e6b_berlin%20in%20one%20day.jpg",
+    markers: [
+      { lat: 52.521918, lng: 13.401963 }, // Near Hackescher Markt
+    ],
   },
   {
     city: "Berlin",
     title: "Berlin Bucket List: 28 Best Things to Do in Berlin",
     url: "https://www.earthtrekkers.com/best-things-to-do-berlin/",
+    markers: [
+      { lat: 52.519444, lng: 13.406667 }, // Near Museum Island
+    ],
   },
   {
     city: "Berlin",
     title: "50 Awesome Things to Do in Berlin: Local Recommended!",
     url: "https://notanomadblog.com/50-things-to-do-in-berlin/",
+    markers: [
+      { lat: 52.515339, lng: 13.387188 }, // Near Friedrichstraße
+    ],
   },
   {
     city: "Berlin",
@@ -80,6 +117,9 @@ export const blogData: BlogData = [
     url: "https://mindthetravel.com/2-day-berlin-itinerary/",
     image:
       "https://mindthetravel.com/wp-content/uploads/2020/03/2-Days-in-Berlin-The-Perfect-Berlin-Itinerary.jpg",
+    markers: [
+      { lat: 52.52, lng: 13.410278 }, // Near Berlin TV Tower
+    ],
   },
   {
     city: "Berlin",
@@ -87,6 +127,9 @@ export const blogData: BlogData = [
     url: "https://weareglobaltravellers.com/2021/08/berlin-things-to-do-germany/",
     image:
       "https://weareglobaltravellers.com/wp-content/uploads/2024/05/@globaltravellers-Pinterest-87.png",
+    markers: [
+      { lat: 52.516275, lng: 13.377704 }, // Near Brandenburg Gate
+    ],
   },
   {
     city: "Berlin",
@@ -94,16 +137,25 @@ export const blogData: BlogData = [
     url: "https://misstourist.com/22-things-to-do-in-berlin-ultimate-bucket-list/",
     image:
       "https://misstourist.com/wp-content/uploads/2017/03/Visit-berlin-things-to-do.jpg",
+    markers: [
+      { lat: 52.520647, lng: 13.409779 }, // Near Alexanderplatz
+    ],
   },
   {
     city: "Berlin",
     title: "15 Unmissable Things to Do in Berlin, Germany",
     url: "https://www.neverendingfootsteps.com/things-to-do-berlin-germany/",
+    markers: [
+      { lat: 52.507209, lng: 13.424363 }, // Near Oberbaum Bridge
+    ],
   },
   {
     city: "Berlin",
     title: "18 Best Things to Do in Berlin",
     url: "https://www.cntraveler.com/gallery/best-things-to-do-in-berlin",
+    markers: [
+      { lat: 52.516682, lng: 13.398364 }, // Near Gendarmenmarkt
+    ],
   },
   {
     city: "Berlin",
@@ -111,19 +163,11 @@ export const blogData: BlogData = [
     url: "https://thatbackpacker.com/50-things-to-do-in-berlin/",
     image:
       "https://media.cntraveler.com/photos/661475a9e1e0fea7995489a1/16:9/w_2580%2Cc_limit/Humboldt%2520Forum_660efad023e56-CF011856.jpg",
+    markers: [
+      { lat: 52.508669, lng: 13.377802 }, // Near Potsdamer Platz
+    ],
   },
-  {
-    city: "Berlin",
-    title: "A complete travel guide with 18 unique things to do in Berlin",
-    url: "https://wheretarawent.com/blog/a-quirky-and-complete-guide-to-berlin-germany",
-    image:
-      "https://images.squarespace-cdn.com/content/v1/570573b259827eb60eabc3fc/1547557802714-XZD2SH0MKC693GGT6HHS/20181213-IMG_4567.jpg?format=1500w",
-  },
-  {
-    city: "Berlin",
-    title: "First solo trip (19F): one week in Berlin this summer",
-    url: "https://www.reddit.com/r/solotravel/comments/12jpna0/first_solo_trip_19f_one_week_in_berlin_this_summer/",
-  },
+
   {
     city: "Berlin",
     title: "Berlin In One Day: What To See, Eat, & Do",

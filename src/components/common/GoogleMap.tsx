@@ -1,49 +1,58 @@
-import React, { useRef } from "react";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
-import { mapStyle } from "components/style/GoogleMap";
-
-const containerStyle = {
-  width: "100%",
-  height: "100%", // Ensure the map takes up the full height of its container
-};
+import React, { useRef, useEffect } from "react";
+import {
+  APIProvider,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
+  Map,
+  AdvancedMarker,
+  Pin,
+} from "@vis.gl/react-google-maps";
+import type { BlogData } from "hooks/types";
 
 const center = {
   lat: 52.52, // Latitude for Berlin
   lng: 13.405, // Longitude for Berlin
 };
 
-const mapOptions = {
-  disableDefaultUI: true,
-  styles: mapStyle, // Use your custom map style
-};
+interface GoogleMapComponentProps {
+  blogData: BlogData;
+}
 
-const MapComponent: React.FC<{ setMap: (map: google.maps.Map) => void }> = ({
-  setMap,
+const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
+  blogData,
 }) => {
-  const mapRef = useRef<google.maps.Map | null>(null);
-
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY, // Replace with your API key
-  });
-
-  const onLoad = (map: google.maps.Map) => {
-    mapRef.current = map;
-    setMap(map);
+  // Function to handle marker click and display the title
+  const handleMarkerClick = (title: string) => {
+    alert(`Marker title: ${title}`);
   };
 
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <GoogleMap
-      mapContainerStyle={containerStyle}
-      center={center}
-      zoom={12}
-      options={mapOptions}
-      onLoad={onLoad}
-    />
+    <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}>
+      <Map
+        center={center}
+        zoom={13}
+        mapId={import.meta.env.VITE_GOOGLE_MAP_ID}
+        disableDefaultUI={true}
+        clickableIcons={false}
+      >
+        {blogData.map((blog) =>
+          blog.markers?.map((marker, index) => (
+            <AdvancedMarker
+              key={`${blog.title}-${index}`}
+              position={{ lat: marker.lat, lng: marker.lng }}
+              clickable={true}
+              onClick={() => handleMarkerClick(blog.title)}
+            >
+              <Pin
+                background={"#1a2b48"}
+                borderColor={"#1a2b48"}
+                glyphColor={"#ffffff"}
+              />
+            </AdvancedMarker>
+          ))
+        )}
+      </Map>
+    </APIProvider>
   );
 };
 
-export default React.memo(MapComponent);
+export default React.memo(GoogleMapComponent);

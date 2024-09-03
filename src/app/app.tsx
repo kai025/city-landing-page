@@ -6,8 +6,6 @@ import Masonry from "react-masonry-css";
 import Card from "components/common/Card";
 import "./app.css";
 import SearchIcon from "assets/icons/search.svg";
-import PlusIcon from "assets/icons/plus.svg";
-import MinusIcon from "assets/icons/minus.svg";
 import MapComponent from "components/common/GoogleMap";
 import {
   ScrollWheelLeft,
@@ -21,7 +19,6 @@ const App: React.FC = () => {
   const [paddingPixel, setPaddingPixel] = useState<number>(
     window.innerHeight * 0.3
   );
-  const mapRef = useRef<google.maps.Map | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -58,22 +55,14 @@ const App: React.FC = () => {
   return (
     <main className="relative min-h-screen bg-black">
       <header className="relative w-full" style={{ height: "60vh" }}>
-        <div className="absolute inset-0">
-          {/* biome-ignore lint/suspicious/noAssignInExpressions: <explanation> */}
-          <MapComponent setMap={(map) => (mapRef.current = map)} />
+        <div className="absolute inset-0 z-40">
+          <MapComponent blogData={filteredBlogs} />
         </div>
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 1) 100%)",
-          }}
-        />
         <div className="absolute top-0 left-0 right-0 mx-auto mt-4 w-full max-w-screen-lg flex items-center justify-center">
           <div className="flex items-center justify-between space-x-4 w-full">
             <form
               onSubmit={handleSearchSubmit}
-              className="flex justify-center w-full mx-auto"
+              className="flex justify-center w-full mx-auto z-50"
             >
               <div className="relative w-full flex items-center px-8">
                 <input
@@ -98,9 +87,16 @@ const App: React.FC = () => {
           <ScrollWheelRight />
         </div>
       </header>
-
+      <div
+        id="gradient"
+        className="relative -inset-y-[170px] z-50 h-[120px]  "
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0, 0, 0, 0) 5%, rgba(0, 0, 0, 1) 50%)",
+        }}
+      />
       <section
-        className="relative z-10 flex flex-col items-center justify-center mx-auto"
+        className="relative z-10 flex flex-col items-center justify-center mx-auto -inset-y-[190px]"
         style={{
           backgroundColor: "black",
           color: "white",

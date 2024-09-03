@@ -25,7 +25,7 @@
       "components/*": ["src/components/*"],
       "hooks/*": ["src/hooks/*"]
     },
-    "types": ["vite/client", "react", "react-dom"]
+    "types": ["vite/client", "react", "react-dom", "google.maps"]
   },
   "include": ["src", "src/vite-env.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
