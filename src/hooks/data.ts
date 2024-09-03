@@ -3,6 +3,7 @@ import type { BlogData } from "hooks/types";
 export const blogData: BlogData = [
   {
     city: "Berlin",
+    catogory: ["tour_guides"],
     title: "Locals' Secrets: How to See Berlin in a Weekend",
     url: "https://notanomadblog.com/2-days-in-berlin-itinerary/",
     markers: [
@@ -22,6 +23,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    catogory: ["tour_guides"],
     title: "What was the best thing you did in Berlin",
     url: "https://community.ricksteves.com/travel-forum/germany/what-was-the-best-thing-you-did-in-berlin",
     markers: [
@@ -30,6 +32,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    catogory: ["tour_guides"],
     title: "Things To Do On Your First Trip To Berlin",
     url: "https://www.wanderlustchloe.com/berlin-things-to-do/",
     image:
@@ -48,6 +51,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    catogory: ["tour_guides"],
     title: "The 18 Best Things To Do in Berlin (Updated 2024)",
     url: "https://www.nomadicmatt.com/travel-blogs/things-to-do-berlin/",
     image: "https://media.nomadicmatt.com/berlineastsidegallery.jpg",
@@ -57,6 +61,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    catogory: ["tour_guides"],
     title: "How to Spend 4 days in Berlin - A Local's Guide",
     url: "https://goaskalocal.com/blog/berlin-germany-itinerary",
     image:
@@ -67,6 +72,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    catogory: ["tour_guides"],
     title: "How To Spend One Week In Berlin - The Ultimate Guide",
     url: "https://theunexploredbackyard.com/one-week-in-berlin/",
     image:
@@ -77,6 +83,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    keywords: ["culture", "art", "history"],
     title: "2 Days In Berlin: A Guide To The Perfect Weekend In Berlin",
     url: "https://wheatlesswanderlust.com/2-days-in-berlin-itinerary/",
     image:
@@ -87,6 +94,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    keywords: ["culture", "art", "history"],
     title: "One Day In Berlin: 12 Awesome Things To Do In 2024",
     url: "https://www.dreambigtravelfarblog.com/blog/one-day-in-berlin",
     image:
@@ -97,6 +105,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    keywords: ["culture", "art", "history"],
     title: "Berlin Bucket List: 28 Best Things to Do in Berlin",
     url: "https://www.earthtrekkers.com/best-things-to-do-berlin/",
     markers: [
@@ -105,6 +114,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    keywords: ["culture", "art", "history"],
     title: "50 Awesome Things to Do in Berlin: Local Recommended!",
     url: "https://notanomadblog.com/50-things-to-do-in-berlin/",
     markers: [
@@ -113,6 +123,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    keywords: ["culture", "art", "history"],
     title: "How to Spend 2 Days in Berlin: The Perfect Berlin Itinerary.",
     url: "https://mindthetravel.com/2-day-berlin-itinerary/",
     image:
@@ -123,6 +134,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    keywords: ["culture", "art", "history"],
     title: "The best things to do in Berlin, Germany",
     url: "https://weareglobaltravellers.com/2021/08/berlin-things-to-do-germany/",
     image:
@@ -133,6 +145,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    keywords: ["culture", "art", "history"],
     title: "22 AWESOME Things to Do in Berlin for an Unforgettable ...",
     url: "https://misstourist.com/22-things-to-do-in-berlin-ultimate-bucket-list/",
     image:
@@ -143,6 +156,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
+    keywords: ["culture", "art", "history"],
     title: "15 Unmissable Things to Do in Berlin, Germany",
     url: "https://www.neverendingfootsteps.com/things-to-do-berlin-germany/",
     markers: [
