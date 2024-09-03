@@ -1,7 +1,6 @@
 interface ScrollWheelProps {
-  onClick: (value: string) => void;
+  onClick: (tag: { label: string; value: string }) => void;
 }
-
 export const ScrollWheelLeft: React.FC<ScrollWheelProps> = ({ onClick }) => {
   const categories = [
     { label: "Hotels", value: "hotels" },
@@ -12,12 +11,12 @@ export const ScrollWheelLeft: React.FC<ScrollWheelProps> = ({ onClick }) => {
   ];
 
   return (
-    <div className="scroll-wheel-left z-40 text-white max-h-[300px] bg-black bg-opacity-40 rounded-xl p-2">
+    <div className="scroll-wheel-left z-40 text-white max-h-[300px] rounded-xl p-2">
       <ul>
         {categories.map((category, index) => (
           <li
             key={index}
-            onClick={() => onClick(category.value)}
+            onClick={() => onClick(category)}
             className="cursor-pointer"
           >
             {category.label}
@@ -43,12 +42,12 @@ export const ScrollWheelRight: React.FC<ScrollWheelProps> = ({ onClick }) => {
   ];
 
   return (
-    <div className="scroll-wheel-right z-40 text-white max-h-[300px] bg-black bg-opacity-40 rounded-xl p-2">
+    <div className="scroll-wheel-right z-40 text-white max-h-[300px] rounded-xl p-2">
       <ul>
         {keywords.map((keyword, index) => (
           <li
             key={index}
-            onClick={() => onClick(keyword.value)}
+            onClick={() => onClick(keyword)}
             className="cursor-pointer"
           >
             {keyword.label}

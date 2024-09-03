@@ -3,7 +3,7 @@ import type { BlogData } from "hooks/types";
 export const blogData: BlogData = [
   {
     city: "Berlin",
-    catogory: ["tour_guides"],
+    category: ["tour_guides"],
     title: "Locals' Secrets: How to See Berlin in a Weekend",
     url: "https://notanomadblog.com/2-days-in-berlin-itinerary/",
     markers: [
@@ -23,7 +23,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
-    catogory: ["tour_guides"],
+    category: ["tour_guides"],
     title: "What was the best thing you did in Berlin",
     url: "https://community.ricksteves.com/travel-forum/germany/what-was-the-best-thing-you-did-in-berlin",
     markers: [
@@ -32,7 +32,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
-    catogory: ["tour_guides"],
+    category: ["tour_guides"],
     title: "Things To Do On Your First Trip To Berlin",
     url: "https://www.wanderlustchloe.com/berlin-things-to-do/",
     image:
@@ -51,7 +51,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
-    catogory: ["tour_guides"],
+    category: ["tour_guides"],
     title: "The 18 Best Things To Do in Berlin (Updated 2024)",
     url: "https://www.nomadicmatt.com/travel-blogs/things-to-do-berlin/",
     image: "https://media.nomadicmatt.com/berlineastsidegallery.jpg",
@@ -61,7 +61,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
-    catogory: ["tour_guides"],
+    category: ["tour_guides"],
     title: "How to Spend 4 days in Berlin - A Local's Guide",
     url: "https://goaskalocal.com/blog/berlin-germany-itinerary",
     image:
@@ -72,7 +72,7 @@ export const blogData: BlogData = [
   },
   {
     city: "Berlin",
-    catogory: ["tour_guides"],
+    category: ["tour_guides"],
     title: "How To Spend One Week In Berlin - The Ultimate Guide",
     url: "https://theunexploredbackyard.com/one-week-in-berlin/",
     image:

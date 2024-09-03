@@ -20,11 +20,6 @@ interface GoogleMapComponentProps {
 const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   blogData,
 }) => {
-  // Function to handle marker click and display the title
-  const handleMarkerClick = (title: string) => {
-    alert(`Marker title: ${title}`);
-  };
-
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}>
       <Map
@@ -40,7 +35,6 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
               key={`${blog.title}-${index}`}
               position={{ lat: marker.lat, lng: marker.lng }}
               clickable={true}
-              onClick={() => handleMarkerClick(blog.title)}
             >
               <img
                 src="https://www.svgrepo.com/show/469486/pin-drop.svg"

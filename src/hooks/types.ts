@@ -14,7 +14,7 @@ export interface BlogEntry {
   title: string;
   url: string;
   image?: string;
-  catogory?: string[];
+  category?: string[];
   keywords?: string[];
   markers?: { lat: number; lng: number }[];
 }
