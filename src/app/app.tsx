@@ -115,8 +115,16 @@ const App: React.FC = () => {
           <ScrollWheelRight onClick={addTag} />
         </div>
       </header>
+      <div
+        id="gradient"
+        className="relative -inset-y-[170px] z-50 h-[120px]  "
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0, 0, 0, 0) 5%, rgba(0, 0, 0, 1) 50%)",
+        }}
+      />
       <section
-        className="relative z-10 flex flex-col items-center justify-center mx-auto"
+        className="relative z-10 flex flex-col items-center justify-center mx-auto -inset-y-[190px]"
         style={{
           backgroundColor: "black",
           color: "white",
