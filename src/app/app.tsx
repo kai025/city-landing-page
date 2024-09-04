@@ -154,7 +154,7 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="z-50  flex items-center justify-center absolute top-0 mt-14 align-middle">
+        <div className="z-50 w-full flex max-w-2xl items-center justify-center absolute top-0 mt-14 align-middle">
           <ScrollWheelTop />
         </div>
         <div className="justify-between w-full">
