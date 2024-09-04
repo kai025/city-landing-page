@@ -62,7 +62,7 @@ export const ScrollWheelTop: React.FC = () => {
   return (
     <div className="scroll-wheel-top text-white w-full overflow-hidden whitespace-nowrap rounded-xl p-2">
       <ul className="inline-flex justify-center w-full space-x-4">
-        <li>Everywhere</li>
+        <li>Anywhere</li>
         <li>Europe</li>
         <li>Germany</li>
         <li>Berlin</li>
