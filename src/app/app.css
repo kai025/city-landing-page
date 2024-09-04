@@ -116,3 +116,75 @@
     transparent 100%
   );
 }
+.scroll-wheel-top {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  z-index: 40;
+}
+
+.scroll-wheel-top ul {
+  display: inline-flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  white-space: nowrap;
+}
+
+.scroll-wheel-top li {
+  display: inline-block;
+  margin: 0 10px;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-wheel-top li.active,
+.scroll-wheel-top li:hover {
+  color: #4aa8dd;
+  transform: scale(1.05); /* Scale up the text slightly on hover */
+}
+
+/* Blue line on top similar to the left scroll wheel */
+.scroll-wheel-top::before {
+  content: "";
+  position: absolute;
+  top: 0; /* Position the line on the top */
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    #4aa8dd,
+    /* This is your brand blue */ transparent
+  );
+}
+
+/* Remove dark gradient shadows from the edges */
+.scroll-wheel-top::after {
+  content: none;
+}
+
+.scroll-wheel-top ul {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    white 20%,
+    white 80%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    white 20%,
+    white 80%,
+    transparent 100%
+  );
+}

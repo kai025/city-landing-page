@@ -57,3 +57,19 @@ export const ScrollWheelRight: React.FC<ScrollWheelProps> = ({ onClick }) => {
     </div>
   );
 };
+
+export const ScrollWheelTop: React.FC = () => {
+  return (
+    <div className="scroll-wheel-top text-white max-h-[100px] overflow-x-auto whitespace-nowrap rounded-xl p-2">
+      <ul className="inline-flex justify-center w-full space-x-4">
+        <li>Beijing</li>
+        <li>Barcelona</li>
+        <li>Berlin</li>
+        <li>Amsterdam</li>
+        <li>Ancourage</li>
+        <li>London</li>
+        <li>Paris</li>
+      </ul>
+    </div>
+  );
+};

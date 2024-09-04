@@ -10,6 +10,7 @@ import MapComponent from "components/common/GoogleMap";
 import {
   ScrollWheelLeft,
   ScrollWheelRight,
+  ScrollWheelTop,
 } from "components/common/ScrollWheel";
 import Logo from "assets/icons/logo.svg"; // Make sure to replace with the correct path to your logo
 import MenuIcon from "assets/icons/menu.svg";
@@ -73,7 +74,10 @@ const App: React.FC = () => {
 
   return (
     <main className="relative min-h-screen bg-black w-full">
-      <header className="relative w-full" style={{ height: "60vh" }}>
+      <header
+        className="relative w-full flex items-center justify-center"
+        style={{ height: "70vh" }}
+      >
         <div className="absolute inset-0 z-40">
           <MapComponent blogData={filteredBlogs} />
         </div>
@@ -150,6 +154,9 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
+        <div className="z-50  flex items-center justify-center absolute top-0 mt-14 align-middle">
+          <ScrollWheelTop />
+        </div>
         <div className="justify-between w-full">
           <ScrollWheelLeft onClick={addTag} />
           <ScrollWheelRight onClick={addTag} />
@@ -164,7 +171,7 @@ const App: React.FC = () => {
         }}
       />
       <section
-        className="relative z-10 flex flex-col items-center justify-center mx-auto -inset-y-[190px]"
+        className="relative z-10 flex flex-col items-center justify-center mx-auto -inset-y-[200px]"
         style={{
           backgroundColor: "black",
           color: "white",
