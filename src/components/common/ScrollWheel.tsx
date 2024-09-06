@@ -15,11 +15,29 @@ export const ScrollWheelLeft: React.FC<ScrollWheelProps> = ({ onClick }) => {
 
   const scrollRef = useRef<HTMLUListElement>(null);
 
-  // Remove the automatic scrolling logic
+  // Infinite scroll logic for left wheel
+  useEffect(() => {
+    const listElement = scrollRef.current;
+    if (listElement) {
+      const handleScroll = () => {
+        // When the scroll reaches the end of the first set, reset to the top of the second set
+        if (listElement.scrollTop >= listElement.scrollHeight / 2) {
+          listElement.scrollTop = 0;
+        }
+      };
+
+      listElement.addEventListener("scroll", handleScroll);
+
+      return () => {
+        listElement.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, []);
 
   return (
     <div className="scroll-wheel-left z-40 text-white max-h-[300px] rounded-xl p-2 overflow-hidden">
       <ul ref={scrollRef} className="scrolling-list">
+        {/* Duplicate the list items */}
         {[...categories, ...categories].map((category, index) => (
           <li
             key={index}
@@ -50,11 +68,29 @@ export const ScrollWheelRight: React.FC<ScrollWheelProps> = ({ onClick }) => {
 
   const scrollRef = useRef<HTMLUListElement>(null);
 
-  // Remove the automatic scrolling logic
+  // Infinite scroll logic for right wheel
+  useEffect(() => {
+    const listElement = scrollRef.current;
+    if (listElement) {
+      const handleScroll = () => {
+        // When the scroll reaches the end of the first set, reset to the top of the second set
+        if (listElement.scrollTop >= listElement.scrollHeight / 2) {
+          listElement.scrollTop = 0;
+        }
+      };
+
+      listElement.addEventListener("scroll", handleScroll);
+
+      return () => {
+        listElement.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, []);
 
   return (
     <div className="scroll-wheel-right z-40 text-white max-h-[300px] rounded-xl p-2 overflow-hidden">
       <ul ref={scrollRef} className="scrolling-list">
+        {/* Duplicate the list items */}
         {[...keywords, ...keywords].map((keyword, index) => (
           <li
             key={index}
