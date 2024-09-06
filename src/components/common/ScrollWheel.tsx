@@ -1,6 +1,9 @@
+import { useRef, useEffect } from "react";
+
 interface ScrollWheelProps {
   onClick: (tag: { label: string; value: string }) => void;
 }
+
 export const ScrollWheelLeft: React.FC<ScrollWheelProps> = ({ onClick }) => {
   const categories = [
     { label: "Hotels", value: "hotels" },
@@ -10,10 +13,14 @@ export const ScrollWheelLeft: React.FC<ScrollWheelProps> = ({ onClick }) => {
     { label: "Hiking", value: "hiking" },
   ];
 
+  const scrollRef = useRef<HTMLUListElement>(null);
+
+  // Remove the automatic scrolling logic
+
   return (
-    <div className="scroll-wheel-left z-40 text-white max-h-[300px] rounded-xl p-2">
-      <ul>
-        {categories.map((category, index) => (
+    <div className="scroll-wheel-left z-40 text-white max-h-[300px] rounded-xl p-2 overflow-hidden">
+      <ul ref={scrollRef} className="scrolling-list">
+        {[...categories, ...categories].map((category, index) => (
           <li
             key={index}
             onClick={() => onClick(category)}
@@ -41,10 +48,14 @@ export const ScrollWheelRight: React.FC<ScrollWheelProps> = ({ onClick }) => {
     { label: "Science", value: "science" },
   ];
 
+  const scrollRef = useRef<HTMLUListElement>(null);
+
+  // Remove the automatic scrolling logic
+
   return (
-    <div className="scroll-wheel-right z-40 text-white max-h-[300px] rounded-xl p-2">
-      <ul>
-        {keywords.map((keyword, index) => (
+    <div className="scroll-wheel-right z-40 text-white max-h-[300px] rounded-xl p-2 overflow-hidden">
+      <ul ref={scrollRef} className="scrolling-list">
+        {[...keywords, ...keywords].map((keyword, index) => (
           <li
             key={index}
             onClick={() => onClick(keyword)}
