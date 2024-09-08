@@ -20,3 +20,8 @@ export interface BlogEntry {
 }
 
 export type BlogData = BlogEntry[];
+
+export type LocationData = Record<
+  string,
+  { center: { lat: number; lng: number }; zoom: number }
+>;

@@ -8,23 +8,22 @@ import {
 } from "@vis.gl/react-google-maps";
 import type { BlogData } from "hooks/types";
 
-const center = {
-  lat: 52.52, // Latitude for Berlin
-  lng: 13.405, // Longitude for Berlin
-};
-
 interface GoogleMapComponentProps {
   blogData: BlogData;
+  center: { lat: number; lng: number };
+  zoom: number;
 }
 
 const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   blogData,
+  center,
+  zoom,
 }) => {
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}>
       <Map
         center={center}
-        zoom={13}
+        zoom={zoom}
         mapId={import.meta.env.VITE_GOOGLE_MAP_ID}
         disableDefaultUI={true}
         clickableIcons={false}

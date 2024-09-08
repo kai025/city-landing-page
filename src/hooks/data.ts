@@ -1,5 +1,29 @@
 import type { BlogData } from "hooks/types";
 
+interface LocationInfo {
+  center: { lat: number; lng: number };
+  zoom: number;
+}
+
+export const locationData: Record<string, LocationInfo> = {
+  Anywhere: {
+    center: { lat: 0, lng: 0 },
+    zoom: 2,
+  },
+  Europe: {
+    center: { lat: 54.526, lng: 15.2551 },
+    zoom: 5,
+  },
+  Germany: {
+    center: { lat: 51.1657, lng: 10.4515 },
+    zoom: 6,
+  },
+  Berlin: {
+    center: { lat: 52.52, lng: 13.405 },
+    zoom: 13,
+  },
+};
+
 export const blogData: BlogData = [
   {
     city: "Berlin",

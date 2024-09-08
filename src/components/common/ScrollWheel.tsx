@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import type { LocationData } from "hooks/types";
 
 interface ScrollWheelProps {
   onClick: (tag: { label: string; value: string }) => void;
@@ -105,14 +106,34 @@ export const ScrollWheelRight: React.FC<ScrollWheelProps> = ({ onClick }) => {
   );
 };
 
-export const ScrollWheelTop: React.FC = () => {
+interface LocationInfo {
+  center: { lat: number; lng: number };
+  zoom: number;
+}
+
+interface ScrollWheelTopProps {
+  locationData: Record<string, LocationInfo>; // Add locationData as a prop
+  onLocationChange: (location: string) => void;
+}
+
+export const ScrollWheelTop: React.FC<ScrollWheelTopProps> = ({
+  locationData,
+  onLocationChange,
+}) => {
+  const locations = Object.keys(locationData); // Use locationData from props
+
   return (
     <div className="scroll-wheel-top text-white w-full overflow-hidden whitespace-nowrap rounded-xl p-2">
       <ul className="inline-flex justify-center w-full space-x-4">
-        <li>Anywhere</li>
-        <li>Europe</li>
-        <li>Germany</li>
-        <li>Berlin</li>
+        {locations.map((location) => (
+          <li
+            key={location}
+            onClick={() => onLocationChange(location)}
+            className="cursor-pointer"
+          >
+            {location}
+          </li>
+        ))}
       </ul>
     </div>
   );
