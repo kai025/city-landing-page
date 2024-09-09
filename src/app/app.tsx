@@ -70,10 +70,10 @@ const App: React.FC = () => {
     setFilteredBlogs(filtered);
   };
 
+  // Modify addTag to allow only one tag to be selected at a time
   const addTag = (tag: { label: string; value: string }) => {
-    if (!tags.find((t) => t.value === tag.value)) {
-      setTags([...tags, tag]);
-    }
+    // Only allow one tag at a time, replace the previous one
+    setTags([tag]);
   };
 
   const removeTag = (tagToRemove: { label: string; value: string }) => {
