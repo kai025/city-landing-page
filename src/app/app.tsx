@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import useUserLocation from "hooks/getLocation";
 import type { BlogData, LocationData } from "hooks/types";
-import { locationData } from "hooks/data";
-import { blogData } from "hooks/data";
+import { locationData } from "hooks/data/anchorage";
+import { blogData } from "hooks/data/anchorage";
 import Masonry from "react-masonry-css";
 import Card from "components/common/Card";
 import "./app.css";
@@ -23,9 +23,7 @@ const App: React.FC = () => {
   const [tags, setTags] = useState<{ label: string; value: string }[]>([]);
   const [filteredBlogs, setFilteredBlogs] = useState<BlogData>(blogData);
   const initialLocation =
-    locationData[import.meta.env.VITE_CITY as keyof typeof locationData] ||
-    locationData.Berlin;
-
+    locationData[import.meta.env.VITE_CITY as keyof typeof locationData];
   const [mapCenter, setMapCenter] = useState(initialLocation.center);
   const [mapZoom, setMapZoom] = useState(initialLocation.zoom);
 
