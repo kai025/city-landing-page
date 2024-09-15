@@ -14,41 +14,48 @@ export const ScrollWheelLeft: React.FC<ScrollWheelProps> = ({ onClick }) => {
     { label: "Hiking", value: "hiking" },
   ];
 
-  const scrollRef = useRef<HTMLUListElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Infinite scroll logic for left wheel
+  // Duplicate the list items multiple times to ensure sufficient content height
+  const repeatedCategories = Array(5).fill(categories).flat();
+
   useEffect(() => {
-    const listElement = scrollRef.current;
-    if (listElement) {
+    const container = scrollRef.current;
+    if (container) {
+      const contentHeight = container.scrollHeight / 2;
+
       const handleScroll = () => {
-        // When the scroll reaches the end of the first set, reset to the top of the second set
-        if (listElement.scrollTop >= listElement.scrollHeight / 2) {
-          listElement.scrollTop = 0;
+        const maxScrollTop = container.scrollHeight - container.clientHeight;
+
+        if (container.scrollTop >= maxScrollTop) {
+          container.scrollTop = container.scrollTop - contentHeight;
+        } else if (container.scrollTop <= 0) {
+          container.scrollTop = container.scrollTop + contentHeight;
         }
       };
 
-      listElement.addEventListener("scroll", handleScroll);
+      container.addEventListener("scroll", handleScroll);
+
+      // Initialize scrollTop to contentHeight to allow infinite scrolling in both directions
+      container.scrollTop = contentHeight;
 
       return () => {
-        listElement.removeEventListener("scroll", handleScroll);
+        container.removeEventListener("scroll", handleScroll);
       };
     }
   }, []);
 
   return (
-    <div className="scroll-wheel-left z-40 text-white max-h-[300px] rounded-xl p-2 overflow-hidden">
-      <ul ref={scrollRef} className="scrolling-list">
-        {/* Duplicate the list items */}
-        {[...categories, ...categories].map((category, index) => (
-          <li
-            key={index}
-            onClick={() => onClick(category)}
-            className="cursor-pointer"
-          >
-            {category.label}
-          </li>
-        ))}
-      </ul>
+    <div className="scroll-wheel-left">
+      <div ref={scrollRef} className="scroll-wheel-content">
+        <ul>
+          {repeatedCategories.map((category, index) => (
+            <li key={index} onClick={() => onClick(category)}>
+              {category.label}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
@@ -67,41 +74,46 @@ export const ScrollWheelRight: React.FC<ScrollWheelProps> = ({ onClick }) => {
     { label: "Science", value: "science" },
   ];
 
-  const scrollRef = useRef<HTMLUListElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Infinite scroll logic for right wheel
+  const repeatedKeywords = Array(3).fill(keywords).flat();
+
   useEffect(() => {
-    const listElement = scrollRef.current;
-    if (listElement) {
+    const container = scrollRef.current;
+    if (container) {
+      const contentHeight = container.scrollHeight / 2;
+
       const handleScroll = () => {
-        // When the scroll reaches the end of the first set, reset to the top of the second set
-        if (listElement.scrollTop >= listElement.scrollHeight / 2) {
-          listElement.scrollTop = 0;
+        const maxScrollTop = container.scrollHeight - container.clientHeight;
+
+        if (container.scrollTop >= maxScrollTop) {
+          container.scrollTop = container.scrollTop - contentHeight;
+        } else if (container.scrollTop <= 0) {
+          container.scrollTop = container.scrollTop + contentHeight;
         }
       };
 
-      listElement.addEventListener("scroll", handleScroll);
+      container.addEventListener("scroll", handleScroll);
+
+      container.scrollTop = contentHeight;
 
       return () => {
-        listElement.removeEventListener("scroll", handleScroll);
+        container.removeEventListener("scroll", handleScroll);
       };
     }
   }, []);
 
   return (
-    <div className="scroll-wheel-right z-40 text-white max-h-[300px] rounded-xl p-2 overflow-hidden">
-      <ul ref={scrollRef} className="scrolling-list">
-        {/* Duplicate the list items */}
-        {[...keywords, ...keywords].map((keyword, index) => (
-          <li
-            key={index}
-            onClick={() => onClick(keyword)}
-            className="cursor-pointer"
-          >
-            {keyword.label}
-          </li>
-        ))}
-      </ul>
+    <div className="scroll-wheel-right">
+      <div ref={scrollRef} className="scroll-wheel-content">
+        <ul>
+          {repeatedKeywords.map((keyword, index) => (
+            <li key={index} onClick={() => onClick(keyword)}>
+              {keyword.label}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

@@ -24,20 +24,36 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* Hide the overflow but allow manual scroll */
-  max-height: 300px; /* Set the max height for scrolling */
+  width: 200px;
   border-radius: 10px;
   z-index: 40;
-  width: 200px; /* Set a fixed width for the scrollable area */
-  -webkit-overflow-scrolling: touch; /* Enable smooth scrolling for touch devices */
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    white 30%,
+    white 70%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    white 30%,
+    white 70%,
+    transparent 100%
+  );
 }
 
 /* Left Scroll Wheel Specific */
 .scroll-wheel-left {
   left: 2%;
   text-align: left;
+}
+
+/* Right Scroll Wheel Specific */
+.scroll-wheel-right {
+  right: 2%;
+  text-align: right;
 }
 
 /* Blue line effect for Left Scroll Wheel */
@@ -51,12 +67,6 @@
   background: linear-gradient(to bottom, transparent, #4aa8dd, transparent);
 }
 
-/* Right Scroll Wheel Specific */
-.scroll-wheel-right {
-  right: 2%;
-  text-align: right;
-}
-
 /* Blue line effect for Right Scroll Wheel */
 .scroll-wheel-right::before {
   content: "";
@@ -68,44 +78,36 @@
   background: linear-gradient(to bottom, transparent, #4aa8dd, transparent);
 }
 
-/* Masking for fade effect */
-.scroll-wheel-left,
-.scroll-wheel-right {
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    white 30%,
-    white 70%,
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    white 30%,
-    white 70%,
-    transparent 100%
-  );
+/* Inner scrollable content */
+.scroll-wheel-left .scroll-wheel-content {
+  padding-left: 8px; /* Add 2px space on the left */
+  height: 300px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-/* List container - Manual scrolling only, no auto-scroll */
+.scroll-wheel-right .scroll-wheel-content {
+  padding-right: 8px; /* Add 2px space on the right */
+  height: 300px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Hide scrollbar for WebKit browsers */
+.scroll-wheel-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* List styles */
 .scroll-wheel-left ul,
 .scroll-wheel-right ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  position: relative;
-  z-index: 1;
-  overflow-y: auto; /* Allow manual vertical scrolling */
-  white-space: nowrap;
-  max-height: 300px; /* Same as the container height */
-  scrollbar-width: none; /* Hide scrollbar in Firefox */
-  -ms-overflow-style: none; /* Hide scrollbar in Internet Explorer and Edge */
-}
-
-/* Hide scrollbar for WebKit browsers */
-.scroll-wheel-left ul::-webkit-scrollbar,
-.scroll-wheel-right ul::-webkit-scrollbar {
-  display: none; /* Hides scrollbar in Chrome, Safari, etc. */
 }
 
 /* List items styling */
@@ -115,16 +117,16 @@
   font-size: 1.2rem;
   color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  transition: color 0.3s ease, transform 0.3s ease; /* Smooth hover effect */
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
-/* Extra padding for left/right alignment */
+/* Adjust padding if needed */
 .scroll-wheel-left li {
-  padding-left: 5px;
+  padding-left: 5px; /* Optional: Adjust if necessary */
 }
 
 .scroll-wheel-right li {
-  padding-right: 5px;
+  padding-right: 5px; /* Optional: Adjust if necessary */
 }
 
 /* Hover and active state styling */
@@ -132,72 +134,6 @@
 .scroll-wheel-left li:hover,
 .scroll-wheel-right li.active,
 .scroll-wheel-right li:hover {
-  color: #4aa8dd; /* Brand blue */
-  transform: scale(1.05); /* Slightly scale the item on hover */
-}
-
-/* Scroll Wheel Top Bar */
-.scroll-wheel-top {
-  position: relative;
-  width: 100%;
-  overflow-x: auto;
-  white-space: nowrap;
-  padding: 10px 0;
-  display: flex;
-  align-items: center;
-  border-radius: 10px;
-  z-index: 40;
-}
-
-/* Styling for the Top Bar list */
-.scroll-wheel-top ul {
-  display: inline-flex;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  white-space: nowrap;
-}
-
-.scroll-wheel-top li {
-  display: inline-block;
-  margin: 0 10px;
-  font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.scroll-wheel-top li.active,
-.scroll-wheel-top li:hover {
   color: #4aa8dd;
   transform: scale(1.05);
-}
-
-/* Blue line effect for the Top Bar */
-.scroll-wheel-top::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(to right, transparent, #4aa8dd, transparent);
-}
-
-/* Mask gradient to fade left and right of the top bar */
-.scroll-wheel-top ul {
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    white 20%,
-    white 80%,
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    white 20%,
-    white 80%,
-    transparent 100%
-  );
 }

@@ -18,8 +18,8 @@ export const locationData: Record<string, LocationInfo> = {
     zoom: 5, // Zoom level for Alaska state
   },
   Anchorage: {
-    center: { lat: 61.2181, lng: -149.9003 }, // Center of Anchorage, Alaska
-    zoom: 12, // Zoom level for Anchorage city
+    center: { lat: 61.2181, lng: -149.9003 },
+    zoom: 12,
   },
 };
 

@@ -8,6 +8,8 @@ interface CardProps {
   url: string;
   city: string;
   image?: string;
+  category?: string[];
+  keywords?: string[];
 }
 
 const Card: React.FC<CardProps> = ({ title, url, city, image }) => {
