@@ -41,7 +41,7 @@ export const blogData: BlogData = [
     city: "Anchorage",
     title: "What to Do in Anchorage, Alaska — Handpicked Alaska",
     url: "https://handpickedalaska.com/blog/what-to-do-in-anchorage-alaska",
-    category: ["tour_guides"],
+    category: ["destinations"],
     keywords: ["mountains", "lakes"],
     markers: [
       { lat: 61.2175, lng: -149.8958 }, // Near Anchorage Museum
@@ -240,7 +240,7 @@ export const blogData: BlogData = [
     url: "https://mindfultravelbysara.com/en/things-to-do-in-anchorage-with-kids/",
     image:
       "https://mindfultravelbysara.com/wp-content/uploads/2023/07/Best-things-to-do-in-anchorage-with-kids.jpg",
-    category: ["tour_guides"],
+    category: ["destinations"],
     keywords: ["events", "family"],
     markers: [
       { lat: 61.1919, lng: -149.8526 }, // Near Alaska Zoo
@@ -275,7 +275,7 @@ export const blogData: BlogData = [
     city: "Anchorage",
     title: "12 Perfect Day Trips From Anchorage, Alaska",
     url: "https://www.travelingigloo.com/12-perfect-day-trips-anchorage-alaska/",
-    category: ["tour_guides"],
+    category: ["hiking"],
     keywords: ["nature", "lakes"],
     markers: [
       { lat: 61.2181, lng: -149.9003 }, // Near Downtown Anchorage
@@ -347,7 +347,7 @@ export const blogData: BlogData = [
     url: "https://www.theblondeabroad.com/ultimate-weekend-alaska-road-trip-itinerary/",
     image:
       "https://www.theblondeabroad.com/wp-content/uploads/2020/07/1The-Ultimate-Weekend-in-Alaska-Road-Trip-Itinerary.jpg",
-    category: ["tour_guides"],
+    category: ["destinations"],
     keywords: ["nature", "events"],
     markers: [
       { lat: 61.1919, lng: -149.8526 }, // Near Alaska Zoo
@@ -363,6 +363,30 @@ export const blogData: BlogData = [
     keywords: ["nature", "events"],
     markers: [
       { lat: 61.2181, lng: -149.9003 }, // Near Downtown Anchorage
+    ],
+  },
+  {
+    city: "Anchorage",
+    title: "Half Day Turnagain Arm Tour with Private Transportation",
+    url: "https://www.toursbylocals.com/tours/united-states/anchorage/tour-details/half-day-turnagain-arm-tour-with-private-transportation-664d27ab1bbe5b817c4483cf",
+    image:
+      "https://tblv3-api.toursbylocals.com/api/optimize-image?imageUrl=https://storage.googleapis.com/tblv3_bucket_us/guides/41/41719/2020160120236110.jpg",
+    category: ["tour_guides"],
+    keywords: ["nature", "events"],
+    markers: [
+      { lat: 61.1419, lng: -149.8226 }, // Near Alaska Zoo
+    ],
+  },
+  {
+    city: "Anchorage",
+    title: "11 am Wilderness, Wildlife, Glacier Experience from Anchorage",
+    url: "https://www.viator.com/tours/Anchorage/Beyond-Anchorage-See-Wilderness-and-Wildlife-View-Glaciers-and-Walk-Alpine-Meadows/d4152-100569P2",
+    image:
+      "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/1a/7c/9b.jpg",
+    category: ["tour_guides"],
+    keywords: ["nature"],
+    markers: [
+      { lat: 61.1439, lng: -149.8246 }, // Near Alaska Zoo
     ],
   },
 ];

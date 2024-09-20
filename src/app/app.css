@@ -137,3 +137,32 @@
   color: #4aa8dd;
   transform: scale(1.05);
 }
+
+/* Blue line effect for the Top Bar */
+.scroll-wheel-top::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, transparent, #4aa8dd, transparent);
+}
+
+/* Mask gradient to fade left and right of the top bar */
+.scroll-wheel-top ul {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    white 20%,
+    white 80%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    white 20%,
+    white 80%,
+    transparent 100%
+  );
+}
