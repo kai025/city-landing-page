@@ -203,9 +203,7 @@ export const blogData: BlogData = [
     url: "https://handpickedalaska.com/blog/10-best-things-to-do-around-anchorage-with-kids",
     category: ["tour_guides"],
     keywords: ["events", "nature"],
-    markers: [
-      { lat: 61.1919, lng: -149.8526 }, // Near Alaska Zoo
-    ],
+    markers: [{ lat: 61.1919, lng: -149.8526 }],
   },
   {
     city: "Anchorage",
@@ -387,6 +385,42 @@ export const blogData: BlogData = [
     keywords: ["nature"],
     markers: [
       { lat: 61.1439, lng: -149.8246 }, // Near Alaska Zoo
+    ],
+  },
+  {
+    city: "Anchorage",
+    title: "Marriott Anchorage Downtown",
+    url: "https://www.viator.com/tours/Anchorage/Beyond-Anchorage-See-Wilderness-and-Wildlife-View-Glaciers-and-Walk-Alpine-Meadows/d4152-100569P2",
+    image:
+      "https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&maxheight=400&photoreference=AXCi2Q7k_TND9PeWf3WN28xVlXuD7nBZUJChSMZRWeU46H6wXFXK14bFaFHeISNlHqnpXfpO1B9bJoITR3eK-6T8zOIqjz-IPiEMyYIh5-E8sPM7GmSw3zXUaWXXfJpvS1CLutQ-kY76M-SHbZtmPCjibjfdgDuzuTiLNVaXrgeijSo3stg4&key=AIzaSyCZB9iu6m-_FZZYpQhzk2ZBavfLo9rYEnk",
+    category: ["hotels"],
+    keywords: ["hotel"],
+    markers: [
+      { lat: 61.1339, lng: -149.8546 }, // Near Alaska Zoo
+    ],
+  },
+  {
+    city: "Anchorage",
+    title: "Extended Stay America - Anchorage - Midtown",
+    url: "https://www.extendedstayamerica.com/hotels/ak/anchorage/midtown?channel=gmb-listing&utm_source=google&utm_medium=organic&utm_campaign=gmb_listing",
+    image:
+      "https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&maxheight=400&photoreference=AXCi2Q4-cD4k8VrpuyUWstrNFKuzMhZmF7MpOAC_7gEPZ9Lp8rq9mLLbdB8T9P_vzM78fl9zu15yts7Q6z7z2oy1_O_ClAxyjW8xGqzV4ufWlopUizByo5sL0ISX8IzlcIiC4dZdfwdQGQE_6vkATh38Y3CfQRzpUwofJ9q49-PqHRge_i3h&key=AIzaSyCZB9iu6m-_FZZYpQhzk2ZBavfLo9rYEnk",
+    category: ["hotels"],
+    keywords: ["hotel"],
+    markers: [
+      { lat: 61.1439, lng: -149.8246 }, // Near Alaska Zoo
+    ],
+  },
+  {
+    city: "Anchorage",
+    title: "Sheraton Anchorage Hotel",
+    url: "https://www.marriott.com/en-us/hotels/ancsi-sheraton-anchorage-hotel/overview/?scid=f2ae0541-1279-4f24-b197-a979c79310b0",
+    image:
+      "https://cf.bstatic.com/xdata/images/hotel/max1024x768/466861409.jpg?k=9a46a270c816c3186c19aba0ba818c7177fcccc852b58fcd3a55190810cb684c&o=&hp=1",
+    category: ["hotels"],
+    keywords: ["hotel"],
+    markers: [
+      { lat: 61.1539, lng: -149.5246 }, // Near Alaska Zoo
     ],
   },
 ];

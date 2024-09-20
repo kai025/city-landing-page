@@ -1,8 +1,3 @@
-import type React from "react";
-import { useState } from "react";
-import HeartIcon from "assets/icons/heart.svg";
-import HeartFilledIcon from "assets/icons/heartfilled.svg";
-
 interface CardProps {
   title: string;
   url: string;
@@ -13,7 +8,22 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ title, url, city, image, category }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  // Mapping of category values to labels
+  const categoryMappings: { [key: string]: string } = {
+    hotels: "Hotels",
+    cruises: "Cruises",
+    tour_guides: "Tour Guides",
+    destinations: "Destinations",
+    hiking: "Hiking",
+  };
+
+  // Get the labels for the categories
+  const categoryLabels = category
+    ?.map((cat) => categoryMappings[cat])
+    .filter(Boolean); // Filter out any undefined values
+
+  // Join the labels into a string
+  const categoryText = categoryLabels?.join(", ");
 
   // Determine if the "Book" button should be displayed
   const showBookButton =
@@ -36,7 +46,7 @@ const Card: React.FC<CardProps> = ({ title, url, city, image, category }) => {
         <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black to-transparent" />
       )}
 
-      {/* Book Button */}
+      {/* Book Button (if applicable) */}
       {showBookButton && (
         <div className="absolute top-4 left-4 z-50">
           <a href={url} target="_blank" rel="noopener noreferrer">
@@ -50,15 +60,17 @@ const Card: React.FC<CardProps> = ({ title, url, city, image, category }) => {
         </div>
       )}
 
-      <div className="w-full absolute top-4 flex items-center space-x-2 justify-end px-5">
-        <div
-          className="w-6 h-6 text-white cursor-pointer"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          {isHovered ? <HeartFilledIcon /> : <HeartIcon />}
+      {/* Category Button */}
+      {categoryText && (
+        <div className="absolute top-4 right-4 z-50">
+          <button
+            type="button"
+            className="px-1 bg-brandgold text-white rounded-lg"
+          >
+            {categoryText}
+          </button>
         </div>
-      </div>
+      )}
 
       <div className="absolute bottom-4 left-0 w-full px-5 pb-2">
         <a href={url} target="_blank" rel="noopener noreferrer">
