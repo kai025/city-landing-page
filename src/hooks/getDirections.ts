@@ -21,10 +21,19 @@ interface ProcessedData {
   offset: number;
 }
 
-const getDirections = () => {
+interface GetDirectionsResult {
+  processSearch: (searchTerm: string) => Promise<void>;
+  results: BlogData;
+  loading: boolean;
+  error: Error | null;
+  extractedKeywords: string[];
+}
+
+const getDirections = (): GetDirectionsResult => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
   const [results, setResults] = useState<BlogData>([]);
+  const [extractedKeywords, setExtractedKeywords] = useState<string[]>([]);
 
   // Memoize processSearch so it's not recreated on each render
   const processSearch = useCallback(async (searchTerm: string) => {
@@ -82,12 +91,12 @@ const getDirections = () => {
                 limit: { type: "number" },
                 offset: { type: "number" },
               },
-              required: ["search", "keywords", "limit", "offset"],
+              required: ["search", "keywords"],
             },
           },
         ],
         function_call: "auto",
-        max_tokens: 550,
+        max_tokens: 350,
       };
 
       const { data } = await axios.post<OpenAIResponse>(apiUrl, requestBody, {
@@ -95,6 +104,9 @@ const getDirections = () => {
       });
 
       const searchQueryObject = parseOpenAIResponse(data);
+
+      // Set the extracted keywords
+      setExtractedKeywords(searchQueryObject.keywords);
 
       // Filter the blogData based on the keywords
       const filteredData = blogData.filter((item: BlogEntry) => {
@@ -112,7 +124,7 @@ const getDirections = () => {
     }
   }, []); // Empty dependency array because we don't want to re-create processSearch on every render
 
-  return { processSearch, results, loading, error };
+  return { processSearch, results, loading, error, extractedKeywords };
 };
 
 export default getDirections;

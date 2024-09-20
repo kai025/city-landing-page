@@ -29,7 +29,8 @@ const App: React.FC = () => {
   const [tags, setTags] = useState<{ label: string; value: string }[]>([]);
 
   // Use the getDirections hook
-  const { processSearch, results, loading, error } = getDirections();
+  const { processSearch, results, loading, error, extractedKeywords } =
+    getDirections();
 
   // Initialize the results state with the default blog data
   const [filteredBlogs, setFilteredBlogs] = useState<BlogData>(blogData);
@@ -49,7 +50,22 @@ const App: React.FC = () => {
     }
   };
 
-  // Add a tag and filter the blogs accordingly
+  // Mapping of keyword values to labels
+  const keywordOptions = [
+    { label: "Mountains", value: "mountains" },
+    { label: "Lakes", value: "lakes" },
+    { label: "Street Arts", value: "street_arts" },
+    { label: "Music", value: "music" },
+    { label: "Culture", value: "culture" },
+    { label: "Food", value: "food" },
+    { label: "Events", value: "events" },
+    { label: "History", value: "history" },
+    { label: "Art", value: "art" },
+    { label: "Science", value: "science" },
+    // Add more keywords as needed
+  ];
+
+  // Add a tag
   const addTag = (tag: { label: string; value: string }) => {
     if (!tags.some((t) => t.value === tag.value)) {
       setTags((prevTags) => [...prevTags, tag]);
@@ -62,16 +78,17 @@ const App: React.FC = () => {
     );
   };
 
+  // State to control whether to show all tags or limit to 3
+  const [showAllTags, setShowAllTags] = useState<boolean>(false);
+
   // Filter by category from ScrollWheelLeft
   const filterByCategory = (category: { label: string; value: string }) => {
     addTag(category); // Add the category as a tag
-    // No need to call filterBlogs here because useEffect will handle it
   };
 
   // Filter by keyword from ScrollWheelRight
   const filterByKeyword = (keyword: { label: string; value: string }) => {
     addTag(keyword); // Add the keyword as a tag
-    // No need to call filterBlogs here because useEffect will handle it
   };
 
   // Handle search input changes
@@ -86,23 +103,23 @@ const App: React.FC = () => {
     // Update the submitted search term
     setSubmittedSearchTerm(searchTerm);
 
+    // Clear previous results and extracted keywords
+    setFilteredBlogs([]);
+    // If you have setExtractedKeywords in your getDirections hook
+    // setExtractedKeywords([]);
+
     // Call processSearch with the search term
     await processSearch(searchTerm);
-  };
 
-  // Update filteredBlogs when results from getDirections change
-  useEffect(() => {
+    // After processSearch completes, perform filtering
     if (results.length > 0) {
-      // If we have results from getDirections, use them
       setFilteredBlogs(results);
-    } else if (submittedSearchTerm === "" && tags.length === 0) {
-      // If no search term and no tags, show all blogs
-      setFilteredBlogs(blogData);
-    } else {
-      // If no results from getDirections, filter locally based on tags
+    } else if (tags.length > 0) {
       filterBlogs();
+    } else {
+      setFilteredBlogs(blogData);
     }
-  }, [results, submittedSearchTerm, tags]);
+  };
 
   // Filter blogs based on tags
   const filterBlogs = useCallback(() => {
@@ -117,12 +134,32 @@ const App: React.FC = () => {
     setFilteredBlogs(filtered);
   }, [tags]);
 
-  // Re-filter blogs when tags change
+  // Add extracted keywords as tags after form submission
   useEffect(() => {
-    if (tags.length > 0 && submittedSearchTerm === "") {
-      filterBlogs();
+    if (extractedKeywords && extractedKeywords.length > 0) {
+      extractedKeywords.forEach((keyword) => {
+        const tagExists = tags.some((t) => t.value === keyword);
+        if (!tagExists) {
+          const keywordOption = keywordOptions.find(
+            (opt) => opt.value === keyword
+          );
+          if (keywordOption) {
+            addTag(keywordOption);
+          } else {
+            // If label not found, use value as label (capitalize first letter)
+            addTag({
+              label: keyword.charAt(0).toUpperCase() + keyword.slice(1),
+              value: keyword,
+            });
+          }
+        }
+      });
+      // After adding extracted keywords as tags, filter the blogs
+      if (tags.length > 0) {
+        filterBlogs();
+      }
     }
-  }, [tags, filterBlogs]);
+  }, [extractedKeywords]);
 
   const breakpointColumnsObj = {
     default: 3,
@@ -152,13 +189,14 @@ const App: React.FC = () => {
             <span className="text-white opacity-60 text-xl">Explore</span>
           </div>
           <form
-            onSubmit={handleSearchSubmit} // Handle search when form is submitted
+            onSubmit={handleSearchSubmit}
             className="flex justify-center items-center z-50 w-full"
           >
             <div className="relative w-full flex items-center px-8 ">
               <div className="relative w-full flex items-center  backdrop-blur-lg">
                 <div className="flex items-center flex-wrap w-full bg-white bg-opacity-40 rounded-l-full rounded-r-full border border-transparent backdrop-blur-lg">
-                  {tags.map((tag) => (
+                  {/* Render up to 3 tags or all tags based on showAllTags state */}
+                  {(showAllTags ? tags : tags.slice(0, 3)).map((tag) => (
                     <div
                       key={tag.value}
                       className="flex items-center bg-white bg-opacity-50 text-black py-1 px-2 rounded-full m-1"
@@ -179,7 +217,7 @@ const App: React.FC = () => {
                     onChange={handleSearchChange}
                     placeholder="Search anything..."
                     className="py-1 px-4 text-xl text-white bg-transparent flex-grow outline-none border border-transparent rounded-full"
-                    style={{ minWidth: "150px" }} // Ensures some space for typing even when tags are present
+                    style={{ minWidth: "150px" }}
                   />
                 </div>
                 {loading ? (
@@ -214,7 +252,7 @@ const App: React.FC = () => {
               <span className="text-white opacity-60">Hannah</span>
               <img
                 className="w-8 h-8 rounded-full object-cover"
-                src="data:image/jpeg;base64,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"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6Hb5xzFZJCTW4cMqmPwsgfw-gILUV7QevvQ&s"
                 alt="profile"
               />
             </button>
