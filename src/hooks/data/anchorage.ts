@@ -392,7 +392,7 @@ export const blogData: BlogData = [
     title: "Marriott Anchorage Downtown",
     url: "https://www.viator.com/tours/Anchorage/Beyond-Anchorage-See-Wilderness-and-Wildlife-View-Glaciers-and-Walk-Alpine-Meadows/d4152-100569P2",
     image:
-      "https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&maxheight=400&photoreference=AXCi2Q7k_TND9PeWf3WN28xVlXuD7nBZUJChSMZRWeU46H6wXFXK14bFaFHeISNlHqnpXfpO1B9bJoITR3eK-6T8zOIqjz-IPiEMyYIh5-E8sPM7GmSw3zXUaWXXfJpvS1CLutQ-kY76M-SHbZtmPCjibjfdgDuzuTiLNVaXrgeijSo3stg4&key=AIzaSyCZB9iu6m-_FZZYpQhzk2ZBavfLo9rYEnk",
+      "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/10/bd/e8/52/anchorage-marriott-downtown.jpg?w=1400&h=-1&s=1",
     category: ["hotels"],
     keywords: ["hotel"],
     markers: [
@@ -404,7 +404,7 @@ export const blogData: BlogData = [
     title: "Extended Stay America - Anchorage - Midtown",
     url: "https://www.extendedstayamerica.com/hotels/ak/anchorage/midtown?channel=gmb-listing&utm_source=google&utm_medium=organic&utm_campaign=gmb_listing",
     image:
-      "https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&maxheight=400&photoreference=AXCi2Q4-cD4k8VrpuyUWstrNFKuzMhZmF7MpOAC_7gEPZ9Lp8rq9mLLbdB8T9P_vzM78fl9zu15yts7Q6z7z2oy1_O_ClAxyjW8xGqzV4ufWlopUizByo5sL0ISX8IzlcIiC4dZdfwdQGQE_6vkATh38Y3CfQRzpUwofJ9q49-PqHRge_i3h&key=AIzaSyCZB9iu6m-_FZZYpQhzk2ZBavfLo9rYEnk",
+      "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2b/8d/7d/4e/exterior.jpg?w=1100&h=-1&s=1",
     category: ["hotels"],
     keywords: ["hotel"],
     markers: [
