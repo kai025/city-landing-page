@@ -1,11 +1,5 @@
-import React, { useRef, useEffect } from "react";
-import {
-  APIProvider,
-  // biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
-  Map,
-  AdvancedMarker,
-  Pin,
-} from "@vis.gl/react-google-maps";
+import React from "react";
+import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps";
 import type { BlogData } from "hooks/types";
 
 interface GoogleMapComponentProps {
@@ -19,11 +13,14 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   center,
   zoom,
 }) => {
+  const mapKey = `${center.lat}-${center.lng}-${zoom}`;
+
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}>
       <Map
-        center={center}
-        zoom={zoom}
+        key={mapKey} // Add key prop to force re-render
+        defaultCenter={center}
+        defaultZoom={zoom}
         mapId={import.meta.env.VITE_GOOGLE_MAP_ID}
         disableDefaultUI={true}
         clickableIcons={false}

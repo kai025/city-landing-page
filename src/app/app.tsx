@@ -1,8 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
-import useUserLocation from "hooks/getLocation";
-import type { BlogData, LocationData } from "hooks/types";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import type { BlogData } from "hooks/types";
 import { locationData } from "hooks/data/anchorage";
-import { blogData } from "hooks/data/anchorage"; // Import blog data
+import { blogData } from "hooks/data/anchorage";
 import Masonry from "react-masonry-css";
 import Card from "components/common/Card";
 import "./app.css";
@@ -13,29 +12,29 @@ import {
   ScrollWheelRight,
   ScrollWheelTop,
 } from "components/common/ScrollWheel";
-import Logo from "assets/icons/logo.svg"; // Replace with the correct path to your logo
+import Logo from "assets/icons/logo.svg";
 import MenuIcon from "assets/icons/menu.svg";
 import ArrowDownIcon from "assets/icons/arrowdown.svg";
 import HeartIcon from "assets/icons/heart.svg";
 import LoadingIcon from "assets/icons/loading.svg";
-import getDirections from "hooks/getDirections"; // Import the getDirections hook
+import getDirections from "hooks/getDirections";
 
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-
-  // New state variable to hold the submitted search term
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState<string>("");
-
   const [tags, setTags] = useState<{ label: string; value: string }[]>([]);
 
   // Use the getDirections hook
-  const { processSearch, results, loading, error } = getDirections();
+  const { processSearch, results, extractedKeywords, loading, error } =
+    getDirections();
 
   // Initialize the results state with the default blog data
   const [filteredBlogs, setFilteredBlogs] = useState<BlogData>(blogData);
 
   const initialLocation =
-    locationData[import.meta.env.VITE_CITY as keyof typeof locationData];
+    locationData[import.meta.env.VITE_CITY as keyof typeof locationData] ||
+    locationData["DefaultCity"]; // Fallback to a default city if VITE_CITY is not set
+
   const [mapCenter, setMapCenter] = useState(initialLocation.center);
   const [mapZoom, setMapZoom] = useState(initialLocation.zoom);
 
@@ -64,14 +63,12 @@ const App: React.FC = () => {
 
   // Filter by category from ScrollWheelLeft
   const filterByCategory = (category: { label: string; value: string }) => {
-    addTag(category); // Add the category as a tag
-    // No need to call filterBlogs here because useEffect will handle it
+    addTag(category);
   };
 
   // Filter by keyword from ScrollWheelRight
   const filterByKeyword = (keyword: { label: string; value: string }) => {
-    addTag(keyword); // Add the keyword as a tag
-    // No need to call filterBlogs here because useEffect will handle it
+    addTag(keyword);
   };
 
   // Handle search input changes
@@ -95,12 +92,15 @@ const App: React.FC = () => {
     if (results.length > 0) {
       // If we have results from getDirections, use them
       setFilteredBlogs(results);
-    } else if (submittedSearchTerm === "" && tags.length === 0) {
-      // If no search term and no tags, show all blogs
-      setFilteredBlogs(blogData);
-    } else {
+    } else if (submittedSearchTerm !== "") {
+      // No results found for the search term
+      setFilteredBlogs([]);
+    } else if (tags.length > 0) {
       // If no results from getDirections, filter locally based on tags
       filterBlogs();
+    } else {
+      // If no search term and no tags, show all blogs
+      setFilteredBlogs(blogData);
     }
   }, [results, submittedSearchTerm, tags]);
 
@@ -122,7 +122,7 @@ const App: React.FC = () => {
     if (tags.length > 0 && submittedSearchTerm === "") {
       filterBlogs();
     }
-  }, [tags, filterBlogs]);
+  }, [tags, filterBlogs, submittedSearchTerm]);
 
   const breakpointColumnsObj = {
     default: 3,
@@ -130,6 +130,11 @@ const App: React.FC = () => {
     900: 2,
     500: 1,
   };
+
+  // Memoize mapCenter, mapZoom, and filteredBlogs
+  const memoizedMapCenter = useMemo(() => mapCenter, [mapCenter]);
+  const memoizedMapZoom = useMemo(() => mapZoom, [mapZoom]);
+  const memoizedFilteredBlogs = useMemo(() => filteredBlogs, [filteredBlogs]);
 
   return (
     <main className="relative min-h-screen bg-black w-full">
@@ -139,9 +144,9 @@ const App: React.FC = () => {
       >
         <div className="absolute inset-0 z-40">
           <MapComponent
-            blogData={filteredBlogs}
-            center={mapCenter}
-            zoom={mapZoom}
+            blogData={memoizedFilteredBlogs}
+            center={memoizedMapCenter}
+            zoom={memoizedMapZoom}
           />
         </div>
         <div className="absolute top-0 mt-4 w-full flex items-center justify-between space-x-2">
@@ -152,11 +157,11 @@ const App: React.FC = () => {
             <span className="text-white opacity-60 text-xl">Explore</span>
           </div>
           <form
-            onSubmit={handleSearchSubmit} // Handle search when form is submitted
+            onSubmit={handleSearchSubmit}
             className="flex justify-center items-center z-50 w-full"
           >
             <div className="relative w-full flex items-center px-8 ">
-              <div className="relative w-full flex items-center  backdrop-blur-lg">
+              <div className="relative w-full flex items-center backdrop-blur-lg">
                 <div className="flex items-center flex-wrap w-full bg-white bg-opacity-40 rounded-l-full rounded-r-full border border-transparent backdrop-blur-lg">
                   {tags.map((tag) => (
                     <div
@@ -179,7 +184,7 @@ const App: React.FC = () => {
                     onChange={handleSearchChange}
                     placeholder="Search anything..."
                     className="py-1 px-4 text-xl text-white bg-transparent flex-grow outline-none border border-transparent rounded-full"
-                    style={{ minWidth: "150px" }} // Ensures some space for typing even when tags are present
+                    style={{ minWidth: "150px" }}
                   />
                 </div>
                 {loading ? (
@@ -214,7 +219,7 @@ const App: React.FC = () => {
               <span className="text-white opacity-60">Hannah</span>
               <img
                 className="w-8 h-8 rounded-full object-cover"
-                src="data:image/jpeg;base64,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"
+                src="your-profile-image-url"
                 alt="profile"
               />
             </button>
@@ -230,35 +235,45 @@ const App: React.FC = () => {
           />
         </div>
         <div className="justify-between w-full">
-          <ScrollWheelLeft onClick={filterByCategory} />{" "}
-          {/* Filter by category */}
-          <ScrollWheelRight onClick={filterByKeyword} />{" "}
-          {/* Filter by keyword */}
+          <ScrollWheelLeft onClick={filterByCategory} />
+          <ScrollWheelRight onClick={filterByKeyword} />
         </div>
       </header>
       <div
         id="gradient"
-        className="relative -inset-y-[170px] z-50 h-[120px]"
+        className="relative -inset-y-[170px] z-40 h-[120px]"
         style={{
           background:
             "linear-gradient(to bottom, rgba(0, 0, 0, 0) 5%, rgba(0, 0, 0, 1) 50%)",
         }}
       />
       <section
-        className="relative z-10 flex flex-col items-center justify-center mx-auto -inset-y-[200px]"
+        className="relative z-10 flex flex-col items-center justify-center mx-auto -inset-y-[190px]"
         style={{
           backgroundColor: "black",
           color: "white",
           minHeight: "30vh",
         }}
       >
+        <div className="relative -inset-y-[90px] z-50">
+          {extractedKeywords.length > 0 && (
+            <div className="text-white text-center mb-4">
+              <p>Search Keywords: [{extractedKeywords.join(", ")}]</p>
+            </div>
+          )}
+          {filteredBlogs.length === 0 && !loading && (
+            <p className="text-white">
+              No results found for "{submittedSearchTerm}"
+            </p>
+          )}
+        </div>
         <Masonry
           breakpointCols={breakpointColumnsObj}
           className="my-masonry-grid -mt-10"
           columnClassName="my-masonry-grid_column"
         >
           {loading && <p>Loading...</p>}
-          {filteredBlogs.map((blog, index) => (
+          {filteredBlogs.map((blog) => (
             <div key={blog.title}>
               <Card
                 title={blog.title}

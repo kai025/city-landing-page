@@ -25,8 +25,8 @@ const getDirections = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
   const [results, setResults] = useState<BlogData>([]);
+  const [extractedKeywords, setExtractedKeywords] = useState<string[]>([]);
 
-  // Memoize processSearch so it's not recreated on each render
   const processSearch = useCallback(async (searchTerm: string) => {
     setLoading(true);
     setError(null);
@@ -35,9 +35,10 @@ const getDirections = () => {
       const functionCall = data.choices[0].message.function_call;
       if (functionCall?.arguments) {
         const args = JSON.parse(functionCall.arguments);
-        const keywords = args.keywords.filter((kw: string) =>
-          allowedItems.keywords.includes(kw)
-        );
+        // Limit keywords to allowed items and up to 10 keywords
+        const keywords = args.keywords
+          .filter((kw: string) => allowedItems.keywords.includes(kw))
+          .slice(0, 10); // Limit to 10 keywords
         return {
           search: args.search,
           keywords,
@@ -66,9 +67,9 @@ const getDirections = () => {
         messages: [
           {
             role: "user",
-            content: `Extract keywords from the following search string based on the allowed items. Here are the allowed items:
-              Keywords: ${allowedItems.keywords.join(", ")}
-              Search String: "${searchTerm}"`,
+            content: `Extract up to 10 keywords from the following search string based on the allowed items. Here are the allowed items:
+Keywords: ${allowedItems.keywords.join(", ")}
+Search String: "${searchTerm}"`,
           },
         ],
         functions: [
@@ -96,6 +97,9 @@ const getDirections = () => {
 
       const searchQueryObject = parseOpenAIResponse(data);
 
+      // Save the actual keywords extracted by ChatGPT
+      setExtractedKeywords(searchQueryObject.keywords);
+
       // Filter the blogData based on the keywords
       const filteredData = blogData.filter((item: BlogEntry) => {
         const itemKeywords = item.keywords?.map((kw) => kw.toLowerCase()) ?? [];
@@ -110,9 +114,9 @@ const getDirections = () => {
     } finally {
       setLoading(false);
     }
-  }, []); // Empty dependency array because we don't want to re-create processSearch on every render
+  }, []);
 
-  return { processSearch, results, loading, error };
+  return { processSearch, results, extractedKeywords, loading, error };
 };
 
 export default getDirections;

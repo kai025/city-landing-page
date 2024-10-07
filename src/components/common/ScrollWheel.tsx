@@ -117,14 +117,13 @@ export const ScrollWheelRight: React.FC<ScrollWheelProps> = ({ onClick }) => {
     </div>
   );
 };
-
 interface LocationInfo {
   center: { lat: number; lng: number };
   zoom: number;
 }
 
 interface ScrollWheelTopProps {
-  locationData: Record<string, LocationInfo>; // Add locationData as a prop
+  locationData: Record<string, LocationInfo>;
   onLocationChange: (location: string) => void;
 }
 
@@ -132,7 +131,7 @@ export const ScrollWheelTop: React.FC<ScrollWheelTopProps> = ({
   locationData,
   onLocationChange,
 }) => {
-  const locations = Object.keys(locationData); // Use locationData from props
+  const locations = Object.keys(locationData);
 
   return (
     <div className="scroll-wheel-top text-white w-full overflow-hidden whitespace-nowrap rounded-xl p-2">
