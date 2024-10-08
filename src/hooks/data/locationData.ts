@@ -80,7 +80,7 @@ export const blogData: BlogData = [
     url: "https://curiositysavestravel.com/best-things-to-do-in-anchorage-alaska-local-recommendations/",
     image:
       "https://curiositysavestravel.com/wp-content/webp-express/webp-images/uploads/2020/02/70-things-to-do-in-anchorage-alaska.png.webp",
-    category: ["destinations"],
+    category: ["place"],
     keywords: ["culture", "art"],
     markers: [
       { lat: 61.2175, lng: -149.8958 }, // Near Anchorage Museum
@@ -127,15 +127,12 @@ export const blogData: BlogData = [
   },
   {
     city: "Anchorage",
-    title: "Just a moment...",
-    url: "https://quirkytravelguy.com/things-to-do-downtown-anchorage/",
+    title: "Discover Anchorage",
+    url: "",
     image:
-      "https://quirkytravelguy.com/wp-content/uploads/2023/08/alaska-mural.jpg",
-    category: ["destinations"],
-    keywords: ["history", "culture"],
-    markers: [
-      { lat: 61.2181, lng: -149.9003 }, // Near Downtown Anchorage
-    ],
+      "https://images.unsplash.com/photo-1525220964737-6c299398493c?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    category: ["place"],
+    keywords: ["mountains", "nature"],
   },
   {
     city: "Anchorage",

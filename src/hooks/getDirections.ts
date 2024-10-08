@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import axios from "axios";
 import { allowedItems } from "./data/allowedItems";
 import type { BlogData, BlogEntry } from "hooks/types";
-import { blogData } from "hooks/data/anchorage";
+import { blogData } from "hooks/data/locationData";
 
 interface OpenAIResponse {
   choices: {

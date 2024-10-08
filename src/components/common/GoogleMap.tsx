@@ -1,6 +1,7 @@
-import React from "react";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
 import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps";
 import type { BlogData } from "hooks/types";
+import React from "react";
 
 interface GoogleMapComponentProps {
   blogData: BlogData;
