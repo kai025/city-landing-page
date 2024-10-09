@@ -3,7 +3,7 @@ const colors = require("tailwindcss/colors");
 
 module.exports = {
   content: ["./src/**/*.tsx", "./src/**/*.css"],
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/forms", "@tailwindcss/line-clamp")],
   theme: {
     fontFamily: {
       sans: ["Montserrat", "sans-serif"],

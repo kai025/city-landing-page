@@ -4,6 +4,7 @@ import React from "react";
 
 interface CardProps {
   title: string;
+  description?: string;
   url: string;
   city: string;
   image?: string;
@@ -14,6 +15,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({
   title,
+  description,
   url,
   city,
   image,
@@ -62,18 +64,31 @@ const Card: React.FC<CardProps> = ({
   };
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
-      className={`relative ${
+      onClick={handleCardClick}
+      className={`relative group ${
         image ? "bg-white" : "bg-deepblue-100"
-      } min-h-[130px] rounded-3xl overflow-hidden sm:w-full md:w-[400px] shadow-lg hover:shadow-md hover:shadow-brandblue active:shadow-lg active:shadow-brandgold`}
+      } min-h-[200px] rounded-3xl overflow-hidden sm:w-full md:w-[400px] shadow-lg hover:shadow-md hover:shadow-brandblue active:shadow-lg active:shadow-brandgold transition-shadow duration-300 bg-center bg-cover cursor-pointer`}
     >
+      {/* Image Section */}
       {image && (
-        <div className="relative cursor-pointer" onClick={handleCardClick}>
-          <img src={image} alt={title} className="w-full h-auto" />
+        <div className="absolute inset-0">
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:blur-sm"
+            loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/path-to-default-image.jpg";
+            }}
+          />
         </div>
       )}
+
+      {/* Gradient Overlay */}
       {image && (
-        <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black to-transparent pointer-events-none z-10" />
       )}
 
       {/* Book Button (if applicable) */}
@@ -82,7 +97,7 @@ const Card: React.FC<CardProps> = ({
           <a href={url} target="_blank" rel="noopener noreferrer">
             <button
               type="button"
-              className="px-2 py-1 bg-brandblue text-white rounded-lg"
+              className="px-3 py-1 bg-brandblue text-white rounded-lg hover:bg-brandblue-dark transition-colors duration-300"
             >
               Book
             </button>
@@ -95,7 +110,7 @@ const Card: React.FC<CardProps> = ({
         <div className="absolute top-4 right-4 z-50">
           <button
             type="button"
-            className="px-1 text-white rounded-lg"
+            className="px-2 py-1 text-white rounded-lg hover:opacity-80 transition-opacity duration-300"
             style={{ backgroundColor: displayedCategory.color }}
             onClick={
               onClick &&
@@ -104,22 +119,39 @@ const Card: React.FC<CardProps> = ({
                 ? onClick
                 : undefined
             }
+            aria-label={`Filter by ${displayedCategory.label}`}
           >
             {displayedCategory.label}
           </button>
         </div>
       )}
 
-      <div className="absolute bottom-4 left-0 w-full px-5 pb-2">
-        <p
-          className={`font-medium text-xl ${
+      {/* Title Section */}
+      <div className="absolute bottom-5 left-0 w-full px-5 z-20">
+        <button
+          type="button"
+          className={`font-medium text-xl text-left ${
             image ? "text-white" : "text-black"
-          } line-clamp-2 cursor-pointer`}
+          } line-clamp-2 cursor-pointer transition-transform duration-300 transform group-hover:-translate-y-6`}
           onClick={handleCardClick}
+          aria-label={`Explore ${title}`}
         >
           {title}
-        </p>
+        </button>
       </div>
+
+      {/* Description Overlay */}
+      {description && (
+        <div className="absolute text-left inset-0 bottom-1 flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+          <p
+            className={`px-5 text-left line-clamp-2 ${
+              image ? "text-white " : "text-black"
+            }`}
+          >
+            {description}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

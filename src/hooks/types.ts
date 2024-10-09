@@ -11,6 +11,7 @@ export interface UnsplashImage {
 
 export interface BlogEntry {
   city: string;
+  description?: string;
   title: string;
   url: string;
   image?: string;

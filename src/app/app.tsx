@@ -351,6 +351,7 @@ const App: React.FC = () => {
               <div key={blog.title}>
                 <Card
                   title={blog.title}
+                  description={blog.description}
                   url={blog.url}
                   city={blog.city}
                   image={blog.image}
