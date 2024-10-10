@@ -1,6 +1,4 @@
-// src/components/common/Card.tsx
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 interface CardProps {
   title: string;
@@ -23,6 +21,26 @@ const Card: React.FC<CardProps> = ({
   keywords,
   onClick,
 }) => {
+  // State to track image orientation
+  const [isHorizontal, setIsHorizontal] = useState(true);
+
+  useEffect(() => {
+    if (image) {
+      // Create a new Image object to determine the dimensions
+      const img = new Image();
+      img.src = image;
+
+      img.onload = () => {
+        // Check if the image is vertical or horizontal
+        if (img.width > img.height) {
+          setIsHorizontal(true); // Horizontal format height
+        } else {
+          setIsHorizontal(false); // Vertical format height
+        }
+      };
+    }
+  }, [image]);
+
   // Mapping of category values to labels and colors
   const categoryMappings: { [key: string]: { label: string; color: string } } =
     {
@@ -67,9 +85,9 @@ const Card: React.FC<CardProps> = ({
     // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
       onClick={handleCardClick}
-      className={`relative group ${
-        image ? "bg-white" : "bg-deepblue-100"
-      } min-h-[200px] rounded-3xl overflow-hidden sm:w-full md:w-[400px] shadow-lg hover:shadow-md hover:shadow-brandblue active:shadow-lg active:shadow-brandgold transition-shadow duration-300 bg-center bg-cover cursor-pointer`}
+      className={`relative group ${image ? "bg-white" : "bg-deepblue-100"} ${
+        isHorizontal ? "min-h-[350px]" : "min-h-[720px]"
+      } rounded-3xl overflow-hidden sm:w-full md:w-[400px] shadow-lg hover:shadow-md hover:shadow-brandblue active:shadow-lg active:shadow-brandgold transition-shadow duration-300 bg-center bg-cover cursor-pointer`}
     >
       {/* Image Section */}
       {image && (
