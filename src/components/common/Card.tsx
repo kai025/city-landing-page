@@ -32,12 +32,7 @@ const Card: React.FC<CardProps> = ({
       img.src = image;
 
       img.onload = () => {
-        // Check if the image is vertical or horizontal
-        if (img.width > img.height) {
-          setIsHorizontal(true); // Horizontal format
-        } else {
-          setIsHorizontal(false); // Vertical format
-        }
+        setIsHorizontal(img.width > img.height);
       };
     }
   }, [image]);
@@ -67,23 +62,48 @@ const Card: React.FC<CardProps> = ({
     }
   }
 
+  // Main card click handler
   const handleCardClick = () => {
     console.log("Card clicked:", title);
     if (displayedCategory?.key === "place" && onClick) {
       console.log("Calling onClick prop for:", title);
       onClick();
-    } else {
+    } else if (url) {
       console.log("Opening URL for:", title);
       window.open(url, "_blank");
     }
   };
 
+  // Individual button click handler to prevent event propagation
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // Prevent the event from bubbling up to the parent div
+    handleCardClick();
+  };
+
+  // Button Configuration Based on Category
+  const buttonConfig = () => {
+    if (
+      displayedCategory?.key === "hotels" ||
+      displayedCategory?.key === "tour_guides"
+    ) {
+      return { text: "Book" };
+    } else if (displayedCategory?.key === "place") {
+      return { text: "Explore" };
+    }
+    return { text: "" };
+  };
+
+  const { text } = buttonConfig();
+
+  // Conditional Rendering Variable for Button Section
+  const showButton = !!text;
+
   return (
     <div
-      onClick={handleCardClick}
       className={`relative group ${image ? "bg-white" : "bg-deepblue-100"} ${
         isHorizontal ? "min-h-[300px]" : "min-h-[700px]"
       } rounded-3xl overflow-hidden sm:w-full md:w-[400px] shadow-lg hover:shadow-md hover:shadow-brandblue active:shadow-lg active:shadow-brandgold transition-shadow duration-300 cursor-pointer`}
+      onClick={handleCardClick} // Attach the handler directly to the card
     >
       {/* Image Background with Blur Effect on Hover */}
       {image && (
@@ -133,35 +153,39 @@ const Card: React.FC<CardProps> = ({
         </button>
       </div>
 
-      {/* Description and Book Button Section */}
+      {/* Description and Button Section with Conditional Rendering */}
       {description && (
         <div className="absolute text-left inset-0 bottom-0 flex flex-col items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20 pb-5">
           <p
             className={`px-5 text-left line-clamp-2 ${
-              image ? "text-white " : "text-black"
-            }`}
+              image ? "text-white " : "text-black "
+            }
+            ${showButton ? " " : "-translate-y-7"}
+            `}
           >
             {description}
           </p>
 
-          {/* Book Button below description */}
-          <div className="mt-3 w-full flex justify-end gap-2 items-center px-5">
-            <a href={url} target="_blank" rel="noopener noreferrer">
+          {/* Conditional Rendering of Button Section */}
+          {showButton && (
+            <div className="mt-3 w-full flex justify-end gap-2 items-center px-5">
               <button
                 type="button"
-                className="px-4 py-2  text-white rounded-full bg-deepblue-500 font-medium"
+                className={`px-4 py-2 text-white rounded-full bg-deepblue-500 font-medium"
+                }`}
+                onClick={handleButtonClick} // Use the separate button click handler
               >
-                Book
+                {text}
               </button>
-            </a>
-            <button
-              type="button"
-              className="w-7 h-7   text-white rounded-full bg-deepblue-500 flex justify-center items-center"
-              onClick={handleCardClick}
-            >
-              <DotsIcon />
-            </button>
-          </div>
+              <button
+                type="button"
+                className="w-7 h-7 text-white rounded-full bg-deepblue-500 flex justify-center items-center"
+                onClick={handleButtonClick} // Prevent parent card click
+              >
+                <DotsIcon />
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
