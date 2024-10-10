@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import DotsIcon from "assets/icons/dots.svg";
 
 interface CardProps {
   title: string;
@@ -33,9 +34,9 @@ const Card: React.FC<CardProps> = ({
       img.onload = () => {
         // Check if the image is vertical or horizontal
         if (img.width > img.height) {
-          setIsHorizontal(true); // Horizontal format height
+          setIsHorizontal(true); // Horizontal format
         } else {
-          setIsHorizontal(false); // Vertical format height
+          setIsHorizontal(false); // Vertical format
         }
       };
     }
@@ -48,7 +49,7 @@ const Card: React.FC<CardProps> = ({
       cruises: { label: "Cruises", color: "#5AC1EA" },
       tour_guides: { label: "Tour Guides", color: "#26bea7" },
       destinations: { label: "Destinations", color: "#ddcd70" },
-      hiking: { label: "Hiking", color: "#8D33FF" },
+      hiking: { label: "Hiking", color: "#5AC1EA" },
       place: { label: "Places", color: "#01243e" },
     };
 
@@ -66,10 +67,6 @@ const Card: React.FC<CardProps> = ({
     }
   }
 
-  // Determine if the "Book" button should be displayed
-  const showBookButton =
-    category?.includes("hotels") || category?.includes("tour_guides");
-
   const handleCardClick = () => {
     console.log("Card clicked:", title);
     if (displayedCategory?.key === "place" && onClick) {
@@ -82,45 +79,23 @@ const Card: React.FC<CardProps> = ({
   };
 
   return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
       onClick={handleCardClick}
       className={`relative group ${image ? "bg-white" : "bg-deepblue-100"} ${
-        isHorizontal ? "min-h-[350px]" : "min-h-[720px]"
-      } rounded-3xl overflow-hidden sm:w-full md:w-[400px] shadow-lg hover:shadow-md hover:shadow-brandblue active:shadow-lg active:shadow-brandgold transition-shadow duration-300 bg-center bg-cover cursor-pointer`}
+        isHorizontal ? "min-h-[300px]" : "min-h-[700px]"
+      } rounded-3xl overflow-hidden sm:w-full md:w-[400px] shadow-lg hover:shadow-md hover:shadow-brandblue active:shadow-lg active:shadow-brandgold transition-shadow duration-300 cursor-pointer`}
     >
-      {/* Image Section */}
+      {/* Image Background with Blur Effect on Hover */}
       {image && (
-        <div className="absolute inset-0">
-          <img
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:blur-sm"
-            loading="lazy"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = "/path-to-default-image.jpg";
-            }}
-          />
-        </div>
+        <div
+          className="absolute inset-0 bg-center bg-cover transition-all duration-200 group-hover:blur-md"
+          style={{ backgroundImage: `url(${image})` }}
+        />
       )}
 
       {/* Gradient Overlay */}
       {image && (
         <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black to-transparent pointer-events-none z-10" />
-      )}
-
-      {/* Book Button (if applicable) */}
-      {showBookButton && (
-        <div className="absolute top-4 left-4 z-50">
-          <a href={url} target="_blank" rel="noopener noreferrer">
-            <button
-              type="button"
-              className="px-3 py-1 bg-brandblue text-white rounded-lg hover:bg-brandblue-dark transition-colors duration-300"
-            >
-              Book
-            </button>
-          </a>
-        </div>
       )}
 
       {/* Single Category Button */}
@@ -148,9 +123,9 @@ const Card: React.FC<CardProps> = ({
       <div className="absolute bottom-5 left-0 w-full px-5 z-20">
         <button
           type="button"
-          className={`font-medium text-xl text-left ${
+          className={`font-medium text-2xl text-left ${
             image ? "text-white" : "text-black"
-          } line-clamp-2 cursor-pointer transition-transform duration-300 transform group-hover:-translate-y-6`}
+          } line-clamp-2 cursor-pointer transition-transform duration-300 transform group-hover:-translate-y-15`}
           onClick={handleCardClick}
           aria-label={`Explore ${title}`}
         >
@@ -158,9 +133,9 @@ const Card: React.FC<CardProps> = ({
         </button>
       </div>
 
-      {/* Description Overlay */}
+      {/* Description and Book Button Section */}
       {description && (
-        <div className="absolute text-left inset-0 bottom-1 flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+        <div className="absolute text-left inset-0 bottom-0 flex flex-col items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20 pb-5">
           <p
             className={`px-5 text-left line-clamp-2 ${
               image ? "text-white " : "text-black"
@@ -168,6 +143,25 @@ const Card: React.FC<CardProps> = ({
           >
             {description}
           </p>
+
+          {/* Book Button below description */}
+          <div className="mt-3 w-full flex justify-end gap-2 items-center px-5">
+            <a href={url} target="_blank" rel="noopener noreferrer">
+              <button
+                type="button"
+                className="px-4 py-2  text-white rounded-full bg-deepblue-500 font-medium"
+              >
+                Book
+              </button>
+            </a>
+            <button
+              type="button"
+              className="w-7 h-7   text-white rounded-full bg-deepblue-500 flex justify-center items-center"
+              onClick={handleCardClick}
+            >
+              <DotsIcon />
+            </button>
+          </div>
         </div>
       )}
     </div>
