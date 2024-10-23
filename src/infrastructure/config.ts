@@ -4,7 +4,7 @@ const getApiBaseUrl = () => {
     return "http://localhost:8000/api";
   }
   if (import.meta.env.VITE_ENV === "production") {
-    return "https://api.yourproductionurl.com/api";
+    return "https://travelzoom-backend-dev-acehd6d6gxd7eyc9.westeurope-01.azurewebsites.net/api";
   }
   return "http://localhost:8000/api";
 };
