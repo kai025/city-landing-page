@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import type { BlogData } from "hooks/types";
 import { locationData } from "hooks/data/locationData";
+import { blogData } from "hooks/data/locationData"; // Corrected import
 import Masonry from "react-masonry-css";
 import Card from "components/common/Card";
 import "./app.css";
@@ -15,53 +17,51 @@ import MenuIcon from "assets/icons/menu.svg";
 import ArrowDownIcon from "assets/icons/arrowdown.svg";
 import HeartIcon from "assets/icons/heart.svg";
 import LoadingIcon from "assets/icons/loading.svg";
+import getDirections from "hooks/getDirections";
 import ExploreCover from "components/common/ExploreCover";
-import { useSearch } from "hooks/useSearch";
-import { defaultCover } from "../infrastructure/config";
 
-interface Tag {
-  type: "nodeTypes" | "keywords" | "userInput";
-  label: string;
-}
+// Import a default cover image
+import defaultCover from "assets/images/coverimage.jpg";
 
 const App: React.FC = () => {
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [searchInput, setSearchInput] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState<string>("");
+  const [tags, setTags] = useState<{ label: string; value: string }[]>([]);
   const [isExploreMode, setIsExploreMode] = useState<boolean>(false);
 
-  const [selectedLocation, setSelectedLocation] = useState<string>("");
-  const [selectedLocationImage, setSelectedLocationImage] = useState<
+  // New state to keep track of selected city and its image
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedCityImage, setSelectedCityImage] = useState<
     string | undefined
   >(undefined);
 
-  const {
-    locations,
-    error: searchError,
-    loading: searchLoading,
-    fetchData: fetchSearchData,
-  } = useSearch();
+  // Use the getDirections hook
+  const { processSearch, results, extractedKeywords, loading, error } =
+    getDirections();
 
-  const [items, setItems] = useState<any[]>([]); // Renamed from blogs
+  // Initialize the results state with the default blog data
+  const [filteredBlogs, setFilteredBlogs] = useState<BlogData>(blogData);
 
-  const defaultLocation = import.meta.env.VITE_CITY;
-  const defaultLocationType = "city";
-  const defaultState = import.meta.env.VITE_STATE;
+  // Set a default location name
+  const defaultLocation = import.meta.env.VITE_DEFAULT_LOCATION || "Anchorage";
   const initialLocation = locationData[defaultLocation];
 
   if (!initialLocation) {
     console.error(
       `Initial location not found for defaultLocation: ${defaultLocation}`
     );
-    return null;
+    // Provide fallback values or handle the error accordingly
+    return null; // Or render an error message
   }
 
   const [mapCenter, setMapCenter] = useState(initialLocation.center);
   const [mapZoom, setMapZoom] = useState(initialLocation.zoom);
 
+  // State to keep track of the selected location name
   const [selectedLocationName, setSelectedLocationName] =
     useState<string>(defaultLocation);
 
+  // Function to handle location changes
   const handleLocationChange = (location: string) => {
     if (locationData[location]) {
       setMapCenter(locationData[location].center);
@@ -72,165 +72,117 @@ const App: React.FC = () => {
     }
   };
 
-  const handleExploreClick = (location: string, image?: string) => {
+  // Function to handle the "Explore" button click
+  const handleExploreClick = (city: string, image?: string) => {
     setIsExploreMode(true);
-    setSelectedLocation(location);
-    setSelectedLocationImage(image);
+    setSelectedCity(city);
+    setSelectedCityImage(image);
+    // Filter the blogs by the city
+    const filtered = blogData.filter((blog) => blog.city === city);
+    setFilteredBlogs(filtered);
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    if (locationData[location]) {
-      setMapCenter(locationData[location].center);
-      setMapZoom(locationData[location].zoom);
+    // Update the map to center on the selected city
+    if (locationData[city]) {
+      setMapCenter(locationData[city].center);
+      setMapZoom(locationData[city].zoom);
     }
   };
 
+  // Function to handle going back from Explore mode
   const handleBack = () => {
     setIsExploreMode(false);
-    setSelectedLocation("");
-    setSelectedLocationImage(undefined);
-    setItems([]);
+    setSelectedCity("");
+    setSelectedCityImage(undefined);
+    setFilteredBlogs(blogData); // Reset to the original blog data
 
+    // Reset the map to the default location
     setMapCenter(initialLocation.center);
     setMapZoom(initialLocation.zoom);
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
+  // Add a tag and filter the blogs accordingly
+  const addTag = (tag: { label: string; value: string }) => {
+    if (!tags.some((t) => t.value === tag.value)) {
+      setTags((prevTags) => [...prevTags, tag]);
+    }
   };
 
+  const removeTag = (tagToRemove: { label: string; value: string }) => {
+    setTags((prevTags) =>
+      prevTags.filter((tag) => tag.value !== tagToRemove.value)
+    );
+  };
+
+  // Filter by category from ScrollWheelLeft
+  const filterByCategory = (category: { label: string; value: string }) => {
+    addTag(category);
+  };
+
+  // Filter by keyword from ScrollWheelRight
+  const filterByKeyword = (keyword: { label: string; value: string }) => {
+    addTag(keyword);
+  };
+
+  // Handle search input changes
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Handle search form submission
   const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsExploreMode(false);
-    setSelectedLocation("");
-    setSelectedLocationImage(undefined);
-
-    // Add searchInput to tags if it's not empty
-    if (searchInput.trim() !== "") {
-      setTags((prevTags) => {
-        if (
-          !prevTags.some(
-            (tag) =>
-              tag.type === "userInput" && tag.label === searchInput.trim()
-          )
-        ) {
-          return [
-            ...prevTags,
-            { type: "userInput", label: searchInput.trim() },
-          ];
-        }
-        return prevTags;
-      });
-      setSearchInput("");
-    }
-
-    // Construct the search parameters
-    const nodeTypes = tags
-      .filter((tag) => tag.type === "nodeTypes")
-      .map((tag) => tag.label);
-    const keywords = tags
-      .filter((tag) => tag.type === "keywords")
-      .map((tag) => tag.label);
-    const userInputs = tags
-      .filter((tag) => tag.type === "userInput")
-      .map((tag) => tag.label);
-
-    const searchParams = {
-      location: selectedLocationName,
-      nodeTypes,
-      keywords,
-      userInput: userInputs.join(" "),
-    };
-
-    const searchTerm = [...nodeTypes, ...keywords, ...userInputs].join(" ");
-    setSubmittedSearchTerm(searchTerm);
-    await fetchSearchData(searchParams);
-  };
-
-  // Function to handle nodeTypes clicks from the left scroll wheel
-  const handleNodeTypeClick = (tag: { label: string; value: string }) => {
-    setTags((prevTags) => {
-      if (
-        !prevTags.some(
-          (existingTag) =>
-            existingTag.type === "nodeTypes" && existingTag.label === tag.label
-        )
-      ) {
-        return [...prevTags, { type: "nodeTypes", label: tag.label }];
-      }
-      return prevTags;
-    });
-  };
-
-  // Function to handle keyword clicks from the right scroll wheel
-  const handleKeywordClick = (tag: { label: string; value: string }) => {
-    setTags((prevTags) => {
-      if (
-        !prevTags.some(
-          (existingTag) =>
-            existingTag.type === "keywords" && existingTag.label === tag.label
-        )
-      ) {
-        return [...prevTags, { type: "keywords", label: tag.label }];
-      }
-      return prevTags;
-    });
-  };
-
-  const removeSearchTag = (tagToRemove: Tag) => {
-    setTags((prevTags) => prevTags.filter((tag) => tag !== tagToRemove));
-  };
-
-  // Update search when tags change
-  useEffect(() => {
-    const nodeTypes = tags
-      .filter((tag) => tag.type === "nodeTypes")
-      .map((tag) => tag.label);
-    const keywords = tags
-      .filter((tag) => tag.type === "keywords")
-      .map((tag) => tag.label);
-    const userInputs = tags
-      .filter((tag) => tag.type === "userInput")
-      .map((tag) => tag.label);
-
-    const searchParams = {
-      location: selectedLocationName,
-      nodeTypes,
-      keywords,
-      userInput: userInputs.join(" "),
-    };
-
-    const searchTerm = [...nodeTypes, ...keywords, ...userInputs].join(" ");
+    setSelectedCity("");
+    setSelectedCityImage(undefined);
+    // Update the submitted search term
     setSubmittedSearchTerm(searchTerm);
 
-    if (tags.length > 0) {
-      fetchSearchData(searchParams);
-    } else {
-      // If no tags, clear the items
-      setItems([]);
-    }
+    // Call processSearch with the search term
+    await processSearch(searchTerm);
+  };
+
+  // Filter blogs based on tags
+  const filterBlogs = useCallback(() => {
+    const filtered = blogData.filter((blog) => {
+      const matchesTags = tags.every(
+        (tag) =>
+          blog.category?.includes(tag.value) ||
+          blog.keywords?.includes(tag.value)
+      );
+      return matchesTags;
+    });
+    setFilteredBlogs(filtered);
   }, [tags]);
 
+  // Update filteredBlogs when results from getDirections change
   useEffect(() => {
     if (isExploreMode) {
+      // Do not overwrite filteredBlogs when in explore mode
       return;
     }
-    if (locations.length > 0) {
-      const transformedItems = locations.map((item) => ({
-        title: item.name,
-        description: item.description,
-        url: item.url,
-        location: item.location,
-        image: item.imageUrl,
-        nodeTypes: item.nodeType, // Updated from nodeType to nodeTypes
-        keywords: item.keywords,
-      }));
-      setItems(transformedItems);
+    if (results.length > 0) {
+      // If we have results from getDirections, use them
+      setFilteredBlogs(results);
     } else if (submittedSearchTerm !== "") {
-      setItems([]);
+      // No results found for the search term
+      setFilteredBlogs([]);
+    } else if (tags.length > 0) {
+      // If no results from getDirections, filter locally based on tags
+      filterBlogs();
     } else {
-      setItems([]);
+      // If no search term, no tags, and not in explore mode, show all blogs
+      setFilteredBlogs(blogData);
     }
-  }, [locations, submittedSearchTerm, isExploreMode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [results, submittedSearchTerm, tags, isExploreMode, filterBlogs]);
+
+  // Re-filter blogs when tags change
+  useEffect(() => {
+    if (tags.length > 0 && submittedSearchTerm === "" && !isExploreMode) {
+      filterBlogs();
+    }
+  }, [tags, filterBlogs, submittedSearchTerm, isExploreMode]);
 
   const breakpointColumnsObj = {
     default: 3,
@@ -239,9 +191,18 @@ const App: React.FC = () => {
     500: 1,
   };
 
+  // Memoize mapCenter, mapZoom, and filteredBlogs
   const memoizedMapCenter = useMemo(() => mapCenter, [mapCenter]);
   const memoizedMapZoom = useMemo(() => mapZoom, [mapZoom]);
-  const memoizedItems = useMemo(() => items, [items]);
+  const memoizedFilteredBlogs = useMemo(() => filteredBlogs, [filteredBlogs]);
+
+  // Get the cover image URL for the selected city
+  let coverImageUrl = selectedCityImage;
+
+  // If no cover image is found, use a default cover image
+  if (!coverImageUrl) {
+    coverImageUrl = defaultCover;
+  }
 
   return (
     <main className="relative min-h-screen bg-black w-full">
@@ -252,7 +213,7 @@ const App: React.FC = () => {
       >
         <div className="absolute inset-0 z-30">
           <MapComponent
-            itemData={memoizedItems}
+            blogData={memoizedFilteredBlogs}
             center={memoizedMapCenter}
             zoom={memoizedMapZoom}
           />
@@ -270,23 +231,17 @@ const App: React.FC = () => {
           >
             <div className="relative w-full flex items-center px-8 ">
               <div className="relative w-full flex items-center backdrop-blur-lg">
-                <div className="flex items-center flex-wrap w-full bg-white bg-opacity-40 rounded-full border border-transparent backdrop-blur-lg px-2 py-1">
-                  {tags.map((tag, index) => (
+                <div className="flex items-center flex-wrap w-full bg-white bg-opacity-40 rounded-l-full rounded-r-full border border-transparent backdrop-blur-lg">
+                  {tags.map((tag) => (
                     <div
-                      key={index}
-                      className={`flex items-center py-1 px-2 rounded-full m-1 text-sm border ${
-                        tag.type === "nodeTypes"
-                          ? "border-blue-500 text-black"
-                          : tag.type === "keywords"
-                          ? "border-green-500 text-black"
-                          : "border-gray-500 text-black"
-                      }`}
+                      key={tag.value}
+                      className="flex items-center bg-white bg-opacity-50 text-black py-1 px-2 rounded-full m-1"
                     >
                       {tag.label}
                       <button
                         type="button"
                         className="ml-2 text-sm"
-                        onClick={() => removeSearchTag(tag)}
+                        onClick={() => removeTag(tag)}
                       >
                         &times;
                       </button>
@@ -294,15 +249,15 @@ const App: React.FC = () => {
                   ))}
                   <input
                     type="text"
-                    value={searchInput}
+                    value={searchTerm}
                     onChange={handleSearchChange}
                     placeholder="Search anything..."
-                    className="py-1 px-2 text-sm text-white bg-transparent flex-grow outline-none border border-transparent rounded-full"
+                    className="py-1 px-4 text-xl text-white bg-transparent flex-grow outline-none border border-transparent rounded-full"
                     style={{ minWidth: "150px" }}
                   />
                 </div>
-                {searchLoading ? (
-                  <div className="absolute right-2 p-2 text-xl rounded-r-full flex items-center justify-center w-7 h-7 text-white mr-2">
+                {loading ? (
+                  <div className="absolute right-2 p-2 text-xl rounded-r-full flex items-center justify-center  w-7 h-7 text-white mr-2">
                     <LoadingIcon />
                   </div>
                 ) : (
@@ -349,12 +304,8 @@ const App: React.FC = () => {
           />
         </div>
         <div className="justify-between w-full">
-          <ScrollWheelLeft state={defaultState} onClick={handleNodeTypeClick} />
-          <ScrollWheelRight
-            state={defaultState} // Pass defaultState here
-            locationType={defaultLocationType} // Pass defaultLocationType here
-            onClick={handleKeywordClick}
-          />{" "}
+          <ScrollWheelLeft onClick={filterByCategory} />
+          <ScrollWheelRight onClick={filterByKeyword} />
         </div>
       </header>
       <div
@@ -373,19 +324,18 @@ const App: React.FC = () => {
           minHeight: "30vh",
         }}
       >
-        {searchLoading && <p>Loading...</p>}
-        {searchError && <p className="text-red-500">{searchError}</p>}
+        {loading && <p>Loading...</p>}
         <div className="z-50 max-w-[1500px]">
           {isExploreMode && (
             <div className="relative w-full -inset-y-[600px]">
               <ExploreCover
-                location={selectedLocation}
-                image={selectedLocationImage || defaultCover}
+                city={selectedCity}
+                image={selectedCityImage || defaultCover}
                 onClose={handleBack}
               />
             </div>
           )}
-          {items.length === 0 && !searchLoading && submittedSearchTerm && (
+          {filteredBlogs.length === 0 && !loading && (
             <p className="text-white">
               No results found for "{submittedSearchTerm}"
             </p>
@@ -397,17 +347,17 @@ const App: React.FC = () => {
             }`}
             columnClassName="my-masonry-grid_column"
           >
-            {items.map((item) => (
-              <div key={item.title}>
+            {filteredBlogs.map((blog) => (
+              <div key={blog.title}>
                 <Card
-                  title={item.title}
-                  description={item.description}
-                  url={item.url}
-                  location={item.location}
-                  image={item.image}
-                  nodeTypes={item.nodeTypes}
-                  keywords={item.keywords}
-                  onClick={() => handleExploreClick(item.location, item.image)}
+                  title={blog.title}
+                  description={blog.description}
+                  url={blog.url}
+                  city={blog.city}
+                  image={blog.image}
+                  category={blog.category}
+                  keywords={blog.keywords}
+                  onClick={() => handleExploreClick(blog.city, blog.image)}
                 />
               </div>
             ))}

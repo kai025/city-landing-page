@@ -1,5 +1,12 @@
 import { useRef, useEffect } from "react";
-import type { LocationData } from "hooks/types";
+import { useKeywords } from "../../hooks/useKeywords";
+
+// Utility function to convert a string to Proper Case
+const toProperCase = (str: string) => {
+  return str
+    .toLowerCase()
+    .replace(/(^|\s)\S/g, (letter) => letter.toUpperCase());
+};
 
 interface ScrollWheelProps {
   onClick: (tag: { label: string; value: string }) => void;
@@ -60,22 +67,29 @@ export const ScrollWheelLeft: React.FC<ScrollWheelProps> = ({ onClick }) => {
   );
 };
 
-export const ScrollWheelRight: React.FC<ScrollWheelProps> = ({ onClick }) => {
-  const keywords = [
-    { label: "Mountains", value: "mountains" },
-    { label: "Lakes", value: "lakes" },
-    { label: "Street Arts", value: "street_arts" },
-    { label: "Music", value: "music" },
-    { label: "Culture", value: "culture" },
-    { label: "Food", value: "food" },
-    { label: "Events", value: "events" },
-    { label: "History", value: "history" },
-    { label: "Art", value: "art" },
-    { label: "Science", value: "science" },
-  ];
+interface ScrollWheelProps {
+  state: string;
+  location?: string; // Optional location
+  locationType?: string; // Optional locationType
+  onClick: (keyword: { label: string; value: string }) => void;
+}
+
+export const ScrollWheelRight: React.FC<ScrollWheelProps> = ({
+  state,
+  location,
+  locationType,
+  onClick,
+}) => {
+  // Use the custom hook to fetch keywords based on state, location, and locationType
+  const { keywords, loading, error } = useKeywords(
+    state,
+    location,
+    locationType
+  );
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Repeat the keywords multiple times to ensure sufficient content height
   const repeatedKeywords = Array(3).fill(keywords).flat();
 
   useEffect(() => {
@@ -95,21 +109,31 @@ export const ScrollWheelRight: React.FC<ScrollWheelProps> = ({ onClick }) => {
 
       container.addEventListener("scroll", handleScroll);
 
+      // Initialize scrollTop to contentHeight for infinite scroll behavior
       container.scrollTop = contentHeight;
 
       return () => {
         container.removeEventListener("scroll", handleScroll);
       };
     }
-  }, []);
+  }, [keywords]);
+
+  // Render loading or error states if needed
+  if (loading) return <p>Loading keywords...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
     <div className="scroll-wheel-right">
       <div ref={scrollRef} className="scroll-wheel-content">
         <ul>
           {repeatedKeywords.map((keyword, index) => (
-            <li key={index} onClick={() => onClick(keyword)}>
-              {keyword.label}
+            <li
+              key={index}
+              onClick={() =>
+                onClick({ label: toProperCase(keyword), value: keyword })
+              }
+            >
+              {toProperCase(keyword)}
             </li>
           ))}
         </ul>
@@ -117,6 +141,7 @@ export const ScrollWheelRight: React.FC<ScrollWheelProps> = ({ onClick }) => {
     </div>
   );
 };
+
 interface LocationInfo {
   center: { lat: number; lng: number };
   zoom: number;

@@ -1,16 +1,15 @@
-// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
-import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps";
-import type { BlogData } from "hooks/types";
 import React from "react";
+import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps";
+import type { ItemData } from "hooks/types";
 
 interface GoogleMapComponentProps {
-  blogData: BlogData;
+  itemData: ItemData;
   center: { lat: number; lng: number };
   zoom: number;
 }
 
 const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
-  blogData,
+  itemData,
   center,
   zoom,
 }) => {
@@ -26,10 +25,10 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         disableDefaultUI={true}
         clickableIcons={false}
       >
-        {blogData.map((blog) =>
-          blog.markers?.map((marker, index) => (
+        {itemData.map((item) =>
+          item.markers?.map((marker, index) => (
             <AdvancedMarker
-              key={`${blog.title}-${index}`}
+              key={`${item.title}-${index}`}
               position={{ lat: marker.lat, lng: marker.lng }}
               clickable={true}
             >

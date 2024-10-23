@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import type React from "react";
+import { useState, useEffect } from "react";
 import DotsIcon from "assets/icons/dots.svg";
 
 interface CardProps {
   title: string;
   description?: string;
   url: string;
-  city: string;
+  location: string;
   image?: string;
-  category?: string[];
+  nodeTypes?: string[];
   keywords?: string[];
   onClick?: () => void; // Optional onClick prop
 }
@@ -16,9 +17,9 @@ const Card: React.FC<CardProps> = ({
   title,
   description,
   url,
-  city,
+  location,
   image,
-  category,
+  nodeTypes,
   keywords,
   onClick,
 }) => {
@@ -37,8 +38,8 @@ const Card: React.FC<CardProps> = ({
     }
   }, [image]);
 
-  // Mapping of category values to labels and colors
-  const categoryMappings: { [key: string]: { label: string; color: string } } =
+  // Mapping of nodeType values to labels and colors
+  const nodeTypeMappings: { [key: string]: { label: string; color: string } } =
     {
       hotels: { label: "Hotels", color: "#5AC1EA" },
       cruises: { label: "Cruises", color: "#5AC1EA" },
@@ -48,16 +49,16 @@ const Card: React.FC<CardProps> = ({
       place: { label: "Places", color: "#01243e" },
     };
 
-  // Determine the category to display (only one)
-  let displayedCategory: { key: string; label: string; color: string } | null =
+  // Determine the nodeType to display (only one)
+  let displayedNodeType: { key: string; label: string; color: string } | null =
     null;
 
-  if (category && category.length > 0) {
-    for (const cat of category) {
-      const mapping = categoryMappings[cat];
+  if (nodeTypes && nodeTypes.length > 0) {
+    for (const nodeType of nodeTypes) {
+      const mapping = nodeTypeMappings[nodeType];
       if (mapping) {
-        displayedCategory = { key: cat, ...mapping };
-        break; // Stop after finding the first valid category
+        displayedNodeType = { key: nodeType, ...mapping };
+        break; // Stop after finding the first valid nodeType
       }
     }
   }
@@ -65,7 +66,7 @@ const Card: React.FC<CardProps> = ({
   // Main card click handler
   const handleCardClick = () => {
     console.log("Card clicked:", title);
-    if (displayedCategory?.key === "place" && onClick) {
+    if (displayedNodeType?.key === "place" && onClick) {
       console.log("Calling onClick prop for:", title);
       onClick();
     } else if (url) {
@@ -80,14 +81,15 @@ const Card: React.FC<CardProps> = ({
     handleCardClick();
   };
 
-  // Button Configuration Based on Category
+  // Button Configuration Based on NodeType
   const buttonConfig = () => {
     if (
-      displayedCategory?.key === "hotels" ||
-      displayedCategory?.key === "tour_guides"
+      displayedNodeType?.key === "hotels" ||
+      displayedNodeType?.key === "tour_guides"
     ) {
       return { text: "Book" };
-    } else if (displayedCategory?.key === "place") {
+    }
+    if (displayedNodeType?.key === "place") {
       return { text: "Explore" };
     }
     return { text: "" };
@@ -99,6 +101,7 @@ const Card: React.FC<CardProps> = ({
   const showButton = !!text;
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
       className={`relative group ${image ? "bg-white" : "bg-deepblue-100"} ${
         isHorizontal ? "min-h-[300px]" : "min-h-[700px]"
@@ -118,23 +121,23 @@ const Card: React.FC<CardProps> = ({
         <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black to-transparent pointer-events-none z-10" />
       )}
 
-      {/* Single Category Button */}
-      {displayedCategory && (
+      {/* Single NodeType Button */}
+      {displayedNodeType && (
         <div className="absolute top-4 right-4 z-50">
           <button
             type="button"
             className="px-2 py-1 text-white rounded-lg hover:opacity-80 transition-opacity duration-300"
-            style={{ backgroundColor: displayedCategory.color }}
+            style={{ backgroundColor: displayedNodeType.color }}
             onClick={
               onClick &&
-              (displayedCategory.key === "destinations" ||
-                displayedCategory.key === "place")
+              (displayedNodeType.key === "destinations" ||
+                displayedNodeType.key === "place")
                 ? onClick
                 : undefined
             }
-            aria-label={`Filter by ${displayedCategory.label}`}
+            aria-label={`Filter by ${displayedNodeType.label}`}
           >
-            {displayedCategory.label}
+            {displayedNodeType.label}
           </button>
         </div>
       )}
@@ -145,7 +148,7 @@ const Card: React.FC<CardProps> = ({
           type="button"
           className={`font-medium text-2xl text-left ${
             image ? "text-white" : "text-black"
-          } line-clamp-2 cursor-pointer transition-transform duration-300 transform group-hover:-translate-y-15`}
+          } line-clamp-2 cursor-pointer transition-transform duration-300 transform group-hover:-translate-y-14`}
           onClick={handleCardClick}
           aria-label={`Explore ${title}`}
         >
@@ -168,11 +171,10 @@ const Card: React.FC<CardProps> = ({
 
           {/* Conditional Rendering of Button Section */}
           {showButton && (
-            <div className="mt-3 w-full flex justify-end gap-2 items-center px-5">
+            <div className="mt-1 w-full flex justify-end gap-2 items-center px-5">
               <button
                 type="button"
-                className={`px-4 py-2 text-white rounded-full bg-deepblue-500 font-medium"
-                }`}
+                className="px-4 py-2 text-white rounded-full bg-deepblue-500 font-medium"
                 onClick={handleButtonClick} // Use the separate button click handler
               >
                 {text}

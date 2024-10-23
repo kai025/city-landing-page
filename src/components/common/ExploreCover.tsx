@@ -1,11 +1,11 @@
 interface ExploreCoverProps {
-  city: string;
+  location: string;
   image: string;
   onClose: () => void;
 }
 
 const ExploreCover: React.FC<ExploreCoverProps> = ({
-  city,
+  location,
   image,
   onClose,
 }) => {
@@ -13,7 +13,7 @@ const ExploreCover: React.FC<ExploreCoverProps> = ({
     <div className="w-full ">
       <img
         src={image}
-        alt={`Cover for ${city}`}
+        alt={`Cover for ${location}`}
         className="w-full object-cover rounded-3xl shadow-xl h-[500px]"
       />
       <button
@@ -27,7 +27,7 @@ const ExploreCover: React.FC<ExploreCoverProps> = ({
       <div className="absolute bottom-8 left-8 text-white">
         <span className="text-xl italic">Explore</span>
         <br />
-        <span className="text-5xl font-bold">{city}</span>
+        <span className="text-5xl font-bold">{location}</span>
       </div>
     </div>
   );

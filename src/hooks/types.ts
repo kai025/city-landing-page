@@ -9,20 +9,22 @@ export interface UnsplashImage {
   };
 }
 
-export interface BlogEntry {
+export interface ItemEntry {
   city: string;
   description?: string;
   title: string;
   url: string;
   image?: string;
-  category?: string[];
+  noteTypes?: string[];
   keywords?: string[];
   markers?: { lat: number; lng: number }[];
 }
 
-export type BlogData = BlogEntry[];
+export type ItemData = ItemEntry[];
 
-export type LocationData = Record<
-  string,
-  { center: { lat: number; lng: number }; zoom: number }
->;
+export interface MapLocation {
+  center: { lat: number; lng: number };
+  zoom: number;
+}
+
+export type LocationDataMap = Record<string, MapLocation>;
