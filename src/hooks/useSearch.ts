@@ -2,8 +2,9 @@ import { useState, useCallback } from "react";
 import { searchLocationsByParams } from "../utils/api/search";
 
 interface SearchParams {
-  location: string;
-  locationType: string; // Assuming you need locationType as well
+  state: string;
+  location?: string;
+  locationType?: string; // Assuming you need locationType as well
   nodeTypes: string[];
   keywords: string[];
   userInput: string;

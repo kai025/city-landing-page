@@ -43,7 +43,6 @@ const App: React.FC = () => {
   } = useSearch();
 
   const [items, setItems] = useState<any[]>([]); // Renamed from blogs
-
   const defaultLocation = import.meta.env.VITE_CITY;
   const defaultLocationType = "city";
   const defaultState = import.meta.env.VITE_STATE;
@@ -135,6 +134,7 @@ const App: React.FC = () => {
       .map((tag) => tag.label);
 
     const searchParams = {
+      state: defaultState,
       location: selectedLocationName,
       nodeTypes,
       keywords,
@@ -193,6 +193,7 @@ const App: React.FC = () => {
       .map((tag) => tag.label);
 
     const searchParams = {
+      state: defaultState,
       location: selectedLocationName,
       nodeTypes,
       keywords,
@@ -273,6 +274,7 @@ const App: React.FC = () => {
                 <div className="flex items-center flex-wrap w-full bg-white bg-opacity-40 rounded-full border border-transparent backdrop-blur-lg px-2 py-1">
                   {tags.map((tag, index) => (
                     <div
+                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                       key={index}
                       className={`flex items-center py-1 px-2 rounded-full m-1 text-sm border ${
                         tag.type === "nodeTypes"
