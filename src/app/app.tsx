@@ -18,6 +18,7 @@ import LoadingIcon from "assets/icons/loading.svg";
 import ExploreCover from "components/common/ExploreCover";
 import { useSearch } from "hooks/useSearch";
 import { defaultCover } from "../infrastructure/config";
+import type { SearchParams } from "hooks/types"; // Ensure proper import paths
 
 interface Tag {
   type: "nodeTypes" | "keywords" | "userInput";
@@ -25,16 +26,20 @@ interface Tag {
 }
 
 const App: React.FC = () => {
+  const defaultLocation = import.meta.env.VITE_CITY;
+  const defaultState = import.meta.env.VITE_STATE;
+  const initialLocation = locationData[defaultLocation];
+
   const [tags, setTags] = useState<Tag[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState<string>("");
   const [isExploreMode, setIsExploreMode] = useState<boolean>(false);
-
-  const [selectedLocation, setSelectedLocation] = useState<string>("");
+  const [selectedLocation, setSelectedLocation] = useState<string>(""); // Set initially empty
   const [selectedLocationImage, setSelectedLocationImage] = useState<
     string | undefined
   >(undefined);
 
+  // Use the custom search hook
   const {
     locations,
     error: searchError,
@@ -42,35 +47,58 @@ const App: React.FC = () => {
     fetchData: fetchSearchData,
   } = useSearch();
 
-  const [items, setItems] = useState<any[]>([]); // Renamed from blogs
-  const defaultLocation = import.meta.env.VITE_CITY;
-  const defaultLocationType = "city";
-  const defaultState = import.meta.env.VITE_STATE;
-  const initialLocation = locationData[defaultLocation];
+  const [items, setItems] = useState<any[]>([]); // Store search results
+  const [defaultLocationType, setDefaultLocationType] =
+    useState<string>("city");
 
-  if (!initialLocation) {
-    console.error(
-      `Initial location not found for defaultLocation: ${defaultLocation}`
-    );
-    return null;
-  }
-
+  // Manage the map's center and zoom state
   const [mapCenter, setMapCenter] = useState(initialLocation.center);
   const [mapZoom, setMapZoom] = useState(initialLocation.zoom);
-
   const [selectedLocationName, setSelectedLocationName] =
     useState<string>(defaultLocation);
 
+  console.log(
+    "locations",
+    selectedLocation,
+    selectedLocationName,
+    defaultLocationType
+  );
+
+  // Search on initial load
+  useEffect(() => {
+    const initialSearchParams: SearchParams = {
+      state: defaultState,
+      location: defaultLocation,
+      locationType: defaultLocationType,
+      nodeTypes: [],
+      keywords: [],
+      userInput: "",
+    };
+
+    fetchSearchData(initialSearchParams); // Perform the search on initial load
+  }, [fetchSearchData]);
+
+  // Handle the location change based on top scroll wheel (e.g., 'Alaska')
   const handleLocationChange = (location: string) => {
     if (locationData[location]) {
+      // A city is selected, so set location and reset locationType to default
       setMapCenter(locationData[location].center);
       setMapZoom(locationData[location].zoom);
       setSelectedLocationName(location);
+
+      // Set the selected city and reset locationType to its default (e.g., "city")
+      setSelectedLocation(location);
+      setDefaultLocationType("city"); // Reset locationType to default when a city is selected
     } else {
-      console.error("Location not found in locationData:", location);
+      // A state (like Alaska) is selected, so clear location and locationType
+      setSelectedLocation(""); // Clear location when a state is selected
+      setSelectedLocationImage(undefined);
+      setSelectedLocationName(defaultState); // Ensure state remains selected
+      setDefaultLocationType(""); // Clear locationType
     }
   };
 
+  // Handle the Explore button click to display a specific location
   const handleExploreClick = (location: string, image?: string) => {
     setIsExploreMode(true);
     setSelectedLocation(location);
@@ -83,6 +111,7 @@ const App: React.FC = () => {
     }
   };
 
+  // Handle the back button in explore mode
   const handleBack = () => {
     setIsExploreMode(false);
     setSelectedLocation("");
@@ -93,17 +122,17 @@ const App: React.FC = () => {
     setMapZoom(initialLocation.zoom);
   };
 
+  // Manage input search change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
   };
 
+  // Handle the search form submission
   const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsExploreMode(false);
-    setSelectedLocation("");
     setSelectedLocationImage(undefined);
 
-    // Add searchInput to tags if it's not empty
     if (searchInput.trim() !== "") {
       setTags((prevTags) => {
         if (
@@ -122,7 +151,7 @@ const App: React.FC = () => {
       setSearchInput("");
     }
 
-    // Construct the search parameters
+    // Create the search parameters, skipping location and locationType if selectedLocation is empty
     const nodeTypes = tags
       .filter((tag) => tag.type === "nodeTypes")
       .map((tag) => tag.label);
@@ -133,20 +162,26 @@ const App: React.FC = () => {
       .filter((tag) => tag.type === "userInput")
       .map((tag) => tag.label);
 
-    const searchParams = {
+    const searchParams: SearchParams = {
       state: defaultState,
-      location: selectedLocationName,
       nodeTypes,
       keywords,
       userInput: userInputs.join(" "),
     };
 
-    const searchTerm = [...nodeTypes, ...keywords, ...userInputs].join(" ");
-    setSubmittedSearchTerm(searchTerm);
+    // Conditionally add location and locationType only if a city is selected
+    if (selectedLocationName !== defaultState) {
+      searchParams.location = selectedLocationName;
+      searchParams.locationType = defaultLocationType;
+    }
+
+    setSubmittedSearchTerm(
+      [...nodeTypes, ...keywords, ...userInputs].join(" ")
+    );
     await fetchSearchData(searchParams);
   };
 
-  // Function to handle nodeTypes clicks from the left scroll wheel
+  // Handle nodeTypes selection from ScrollWheelLeft
   const handleNodeTypeClick = (tag: { label: string; value: string }) => {
     setTags((prevTags) => {
       if (
@@ -161,7 +196,7 @@ const App: React.FC = () => {
     });
   };
 
-  // Function to handle keyword clicks from the right scroll wheel
+  // Handle keywords selection from ScrollWheelRight
   const handleKeywordClick = (tag: { label: string; value: string }) => {
     setTags((prevTags) => {
       if (
@@ -176,11 +211,12 @@ const App: React.FC = () => {
     });
   };
 
+  // Remove search tag
   const removeSearchTag = (tagToRemove: Tag) => {
     setTags((prevTags) => prevTags.filter((tag) => tag !== tagToRemove));
   };
 
-  // Update search when tags change
+  // Update search results when tags change
   useEffect(() => {
     const nodeTypes = tags
       .filter((tag) => tag.type === "nodeTypes")
@@ -192,44 +228,47 @@ const App: React.FC = () => {
       .filter((tag) => tag.type === "userInput")
       .map((tag) => tag.label);
 
-    const searchParams = {
+    const searchParams: SearchParams = {
       state: defaultState,
-      location: selectedLocationName,
       nodeTypes,
       keywords,
       userInput: userInputs.join(" "),
     };
 
-    const searchTerm = [...nodeTypes, ...keywords, ...userInputs].join(" ");
-    setSubmittedSearchTerm(searchTerm);
+    // Conditionally add location and locationType only if a city is selected
+    if (selectedLocationName !== defaultState) {
+      searchParams.location = selectedLocationName;
+      searchParams.locationType = defaultLocationType;
+    }
+
+    setSubmittedSearchTerm(
+      [...nodeTypes, ...keywords, ...userInputs].join(" ")
+    );
 
     if (tags.length > 0) {
       fetchSearchData(searchParams);
     } else {
-      // If no tags, clear the items
       setItems([]);
     }
-  }, [tags]);
+  }, [tags, selectedLocationName]);
 
+  // Handle results transformation
   useEffect(() => {
-    if (isExploreMode) {
-      return;
-    }
+    if (isExploreMode) return;
+
     if (locations.length > 0) {
       const transformedItems = locations.map((item) => ({
-        title: item.name,
+        title: item.title,
         description: item.description,
         url: item.url,
-        location: item.location,
-        image: item.imageUrl,
-        nodeTypes: item.nodeType, // Updated from nodeType to nodeTypes
+        markers: item.markers,
+        image: item.image,
+        nodeTypes: item.nodeTypes,
         keywords: item.keywords,
       }));
       setItems(transformedItems);
-    } else if (submittedSearchTerm !== "") {
-      setItems([]);
     } else {
-      setItems([]);
+      setItems(submittedSearchTerm ? [] : []);
     }
   }, [locations, submittedSearchTerm, isExploreMode]);
 
@@ -269,12 +308,11 @@ const App: React.FC = () => {
             onSubmit={handleSearchSubmit}
             className="flex justify-center items-center z-40 w-full"
           >
-            <div className="relative w-full flex items-center px-8 ">
+            <div className="relative w-full flex items-center px-8">
               <div className="relative w-full flex items-center backdrop-blur-lg">
                 <div className="flex items-center flex-wrap w-full bg-white bg-opacity-40 rounded-full border border-transparent backdrop-blur-lg px-2 py-1">
                   {tags.map((tag, index) => (
                     <div
-                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                       key={index}
                       className={`flex items-center py-1 px-2 rounded-full m-1 text-sm border ${
                         tag.type === "nodeTypes"
@@ -353,10 +391,11 @@ const App: React.FC = () => {
         <div className="justify-between w-full">
           <ScrollWheelLeft state={defaultState} onClick={handleNodeTypeClick} />
           <ScrollWheelRight
-            state={defaultState} // Pass defaultState here
-            locationType={defaultLocationType} // Pass defaultLocationType here
+            state={defaultState}
+            location={selectedLocationName}
+            locationType={defaultLocationType}
             onClick={handleKeywordClick}
-          />{" "}
+          />
         </div>
       </header>
       <div
@@ -405,7 +444,7 @@ const App: React.FC = () => {
                   title={item.title}
                   description={item.description}
                   url={item.url}
-                  location={item.location}
+                  location={item.markers}
                   image={item.image}
                   nodeTypes={item.nodeTypes}
                   keywords={item.keywords}

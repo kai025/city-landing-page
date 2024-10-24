@@ -26,17 +26,19 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         clickableIcons={false}
       >
         {itemData.map((item) =>
-          item.markers?.map((marker, index) => (
+          item.markers?.map((loc, index) => (
             <AdvancedMarker
               key={`${item.title}-${index}`}
-              position={{ lat: marker.lat, lng: marker.lng }}
+              position={{ lat: loc.lat, lng: loc.lng }}
               clickable={true}
             >
-              <img
-                src="https://www.svgrepo.com/show/469486/pin-drop.svg"
-                alt="Pin"
-                className="w-8 h-8"
-              />
+              <div className="marker-content">
+                <img
+                  src="https://www.svgrepo.com/show/469486/pin-drop.svg"
+                  alt="Pin"
+                  className="w-8 h-8"
+                />
+              </div>
             </AdvancedMarker>
           ))
         )}

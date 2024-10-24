@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_BASE_URL } from "../../infrastructure/config";
+import type { ItemData } from "../../hooks/types";
 
 // Helper function to convert string to proper case
 const toProperCase = (str: string): string => {
@@ -18,9 +19,11 @@ interface SearchParams {
 /**
  * Fetch locations based on search parameters from the backend.
  * @param {SearchParams} params - The search parameters
- * @returns {Promise<object[]>} - A promise that resolves to the list of locations
+ * @returns {Promise<ItemData>} - A promise that resolves to the list of locations
  */
-export const searchLocationsByParams = async (params: SearchParams) => {
+export const searchLocationsByParams = async (
+  params: SearchParams
+): Promise<ItemData> => {
   // Ensure state, location, and locationType are properly cased
   const properCasedState = toProperCase(params.state);
   const properCasedLocation = toProperCase(params.location || "");

@@ -35,12 +35,19 @@ export const useKeywords = (
         ? toProperCase(locationType)
         : undefined;
 
-      const fetchedKeywords = await getAllowedKeywords(
-        properCasedState,
-        properCasedLocation,
-        properCasedLocationType
-      );
-      setKeywords(fetchedKeywords); // Update the keywords state
+      // If the state and location are the same, pass only the state
+      if (properCasedLocation && properCasedState === properCasedLocation) {
+        const fetchedKeywords = await getAllowedKeywords(properCasedState);
+        setKeywords(fetchedKeywords); // Update the keywords state
+      } else {
+        // Pass all parameters if state and location are different
+        const fetchedKeywords = await getAllowedKeywords(
+          properCasedState,
+          properCasedLocation,
+          properCasedLocationType
+        );
+        setKeywords(fetchedKeywords); // Update the keywords state
+      }
     } catch (err) {
       setError("Failed to fetch keywords from the backend.");
     } finally {

@@ -15,7 +15,7 @@ export interface ItemEntry {
   title: string;
   url: string;
   image?: string;
-  noteTypes?: string[];
+  nodeTypes?: string[];
   keywords?: string[];
   markers?: { lat: number; lng: number }[];
 }
@@ -28,3 +28,13 @@ export interface MapLocation {
 }
 
 export type LocationDataMap = Record<string, MapLocation>;
+
+export interface SearchParams {
+  state: string;
+  location?: string;
+  locationType?: string;
+  nodeTypes: string[];
+  keywords: string[];
+  userInput: string;
+  itemType?: string;
+}

@@ -13,6 +13,15 @@ interface CardProps {
   onClick?: () => void; // Optional onClick prop
 }
 
+// Helper function to convert a string to Proper Case
+const toProperCase = (str: string): string => {
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
 const Card: React.FC<CardProps> = ({
   title,
   description,
@@ -45,8 +54,8 @@ const Card: React.FC<CardProps> = ({
       cruises: { label: "Cruises", color: "#5AC1EA" },
       tour_guides: { label: "Tour Guides", color: "#26bea7" },
       destinations: { label: "Destinations", color: "#ddcd70" },
-      hiking: { label: "Hiking", color: "#5AC1EA" },
-      place: { label: "Places", color: "#01243e" },
+      Experience: { label: "Experience", color: "#5AC1EA" },
+      Attraction: { label: "Attraction", color: "#01243e" },
     };
 
   // Determine the nodeType to display (only one)
@@ -65,12 +74,9 @@ const Card: React.FC<CardProps> = ({
 
   // Main card click handler
   const handleCardClick = () => {
-    console.log("Card clicked:", title);
     if (displayedNodeType?.key === "place" && onClick) {
-      console.log("Calling onClick prop for:", title);
       onClick();
     } else if (url) {
-      console.log("Opening URL for:", title);
       window.open(url, "_blank");
     }
   };
@@ -101,12 +107,11 @@ const Card: React.FC<CardProps> = ({
   const showButton = !!text;
 
   return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
       className={`relative group ${image ? "bg-white" : "bg-deepblue-100"} ${
         isHorizontal ? "min-h-[300px]" : "min-h-[700px]"
       } rounded-3xl overflow-hidden sm:w-full md:w-[400px] shadow-lg hover:shadow-md hover:shadow-brandblue active:shadow-lg active:shadow-brandgold transition-shadow duration-300 cursor-pointer`}
-      onClick={handleCardClick} // Attach the handler directly to the card
+      onClick={handleCardClick}
     >
       {/* Image Background with Blur Effect on Hover */}
       {image && (
@@ -142,7 +147,7 @@ const Card: React.FC<CardProps> = ({
         </div>
       )}
 
-      {/* Title Section */}
+      {/* Title Section with Proper Case */}
       <div className="absolute bottom-5 left-0 w-full px-5 z-20">
         <button
           type="button"
@@ -152,7 +157,7 @@ const Card: React.FC<CardProps> = ({
           onClick={handleCardClick}
           aria-label={`Explore ${title}`}
         >
-          {title}
+          {toProperCase(title)} {/* Apply Proper Case to the title */}
         </button>
       </div>
 
@@ -175,7 +180,7 @@ const Card: React.FC<CardProps> = ({
               <button
                 type="button"
                 className="px-4 py-2 text-white rounded-full bg-deepblue-500 font-medium"
-                onClick={handleButtonClick} // Use the separate button click handler
+                onClick={handleButtonClick}
               >
                 {text}
               </button>
