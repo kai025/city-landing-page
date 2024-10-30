@@ -4,7 +4,7 @@ import type { ItemData } from "../../hooks/types";
 
 // Helper function to convert string to proper case
 const toProperCase = (str: string): string => {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 };
 
 interface SearchParams {

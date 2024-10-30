@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { getAllowedKeywords } from "../utils/api/keywords";
 
-// Helper function to convert string to proper case
-const toProperCase = (str: string): string => {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+// Helper function to convert a string to Proper Case, with added check for undefined values
+const toProperCase = (str?: string): string => {
+  return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 };
 
 /**
