@@ -19,18 +19,12 @@ import LoadingIcon from "assets/icons/loading.svg";
 import ExploreCover from "components/common/ExploreCover";
 import { useSearch } from "hooks/useSearch";
 import { defaultCover } from "../infrastructure/config";
-import type {
-  ItemEntry,
-  SearchParams,
-  Tag,
-  LocationDataItem,
-  LocationInfo,
-} from "hooks/types";
+import type { ItemEntry, SearchParams, Tag, LocationInfo } from "hooks/types";
 
 const App: React.FC = () => {
   const defaultLocation = import.meta.env.VITE_CITY as string;
   const defaultState = import.meta.env.VITE_STATE as string;
-  const initialLocation = locationData[defaultState] as LocationDataItem;
+  const initialLocation = locationData[defaultState] as LocationInfo;
   const [selectedLocationType, setSelectedLocationType] =
     useState<string>("state");
   const [selectedLocationName, setSelectedLocationName] = useState<string>(
@@ -79,7 +73,7 @@ const App: React.FC = () => {
   }, [fetchSearchData, defaultState]);
 
   const handleLocationChange = (location: string): void => {
-    const locationInfo = locationData[location] as LocationDataItem;
+    const locationInfo = locationData[location] as LocationInfo;
     if (locationInfo) {
       setMapCenter(locationInfo.center);
       setMapZoom(locationInfo.zoom);
@@ -107,7 +101,7 @@ const App: React.FC = () => {
     setSelectedLocationImage(image);
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    const locationInfo = locationData[location] as LocationDataItem;
+    const locationInfo = locationData[location] as LocationInfo;
     if (locationInfo) {
       setMapCenter(locationInfo.center);
       setMapZoom(locationInfo.zoom);

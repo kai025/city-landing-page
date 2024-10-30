@@ -43,16 +43,9 @@ export interface Tag {
   label: string;
 }
 
-export interface LocationDataItem {
+export interface LocationInfo {
   center: { lat: number; lng: number };
   zoom: number;
   locationType: string;
   name: string;
-}
-
-export interface LocationInfo {
-  center: { lat: number; lng: number };
-  zoom: number;
-  locationType?: string;
-  name?: string;
 }
