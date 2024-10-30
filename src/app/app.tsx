@@ -24,7 +24,8 @@ import type { ItemEntry, SearchParams, Tag, LocationInfo } from "hooks/types";
 const App: React.FC = () => {
   const defaultLocation = import.meta.env.VITE_CITY as string;
   const defaultState = import.meta.env.VITE_STATE as string;
-  const initialLocation = locationData[defaultState] as LocationInfo;
+  const initialLocation =
+    locationData[defaultState] || (locationData.Alaska as LocationInfo);
   const [selectedLocationType, setSelectedLocationType] =
     useState<string>("state");
   const [selectedLocationName, setSelectedLocationName] = useState<string>(
