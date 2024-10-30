@@ -6,7 +6,10 @@ interface CardProps {
   title: string;
   description?: string;
   url: string;
-  location: string;
+  location?: {
+    lat: number;
+    lng: number;
+  }[];
   image?: string;
   nodeTypes?: string[];
   keywords?: string[];
@@ -26,7 +29,6 @@ const Card: React.FC<CardProps> = ({
   title,
   description,
   url,
-  location,
   image,
   nodeTypes,
   keywords,
@@ -50,13 +52,12 @@ const Card: React.FC<CardProps> = ({
   // Mapping of nodeType values to labels and colors
   const nodeTypeMappings: { [key: string]: { label: string; color: string } } =
     {
-      hotels: { label: "Hotels", color: "#5AC1EA" },
-      cruises: { label: "Cruises", color: "#5AC1EA" },
-      tour_guides: { label: "Tour Guides", color: "#26bea7" },
-      destinations: { label: "Destinations", color: "#ddcd70" },
       Experience: { label: "Experience", color: "#5AC1EA" },
       Attraction: { label: "Attraction", color: "#01243e" },
+      // Add more mappings as needed
     };
+
+  const defaultNodeTypeColor = "#CCCCCC"; // Default color
 
   // Determine the nodeType to display (only one)
   let displayedNodeType: { key: string; label: string; color: string } | null =
@@ -69,6 +70,14 @@ const Card: React.FC<CardProps> = ({
         displayedNodeType = { key: nodeType, ...mapping };
         break; // Stop after finding the first valid nodeType
       }
+    }
+    // If no mapping found, assign default
+    if (!displayedNodeType) {
+      displayedNodeType = {
+        key: nodeTypes[0],
+        label: toProperCase(nodeTypes[0]),
+        color: defaultNodeTypeColor,
+      };
     }
   }
 
@@ -168,8 +177,8 @@ const Card: React.FC<CardProps> = ({
             className={`px-5 text-left line-clamp-2 ${
               image ? "text-white " : "text-black "
             }
-            ${showButton ? " " : "-translate-y-7"}
-            `}
+                ${showButton ? " " : "-translate-y-7"}
+                `}
           >
             {description}
           </p>

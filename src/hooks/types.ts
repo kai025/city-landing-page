@@ -33,8 +33,26 @@ export interface SearchParams {
   state: string;
   location?: string;
   locationType?: string;
-  nodeTypes: string[];
+  nodeTypes?: string[];
   keywords: string[];
   userInput: string;
-  itemType?: string;
+}
+
+export interface Tag {
+  type: "nodeTypes" | "keywords" | "userInput";
+  label: string;
+}
+
+export interface LocationDataItem {
+  center: { lat: number; lng: number };
+  zoom: number;
+  locationType: string;
+  name: string;
+}
+
+export interface LocationInfo {
+  center: { lat: number; lng: number };
+  zoom: number;
+  locationType?: string;
+  name?: string;
 }

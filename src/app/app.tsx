@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useMemo } from "react";
+// App.tsx
+
+import type React from "react";
+import { useState, useEffect, useMemo } from "react";
 import { locationData } from "hooks/data/locationData";
 import Masonry from "react-masonry-css";
 import Card from "components/common/Card";
 import "./app.css";
 import SearchIcon from "assets/icons/search.svg";
 import MapComponent from "components/common/GoogleMap";
-import {
-  ScrollWheelLeft,
-  ScrollWheelRight,
-  ScrollWheelTop,
-} from "components/common/ScrollWheel";
+import { ScrollWheelRight } from "components/common/ScrollWheelRight";
+import { ScrollWheelLeft } from "components/common/ScrollWheelLeft";
+import { ScrollWheelTop } from "components/common/ScrollWheelTop";
 import Logo from "assets/icons/logo.svg";
 import MenuIcon from "assets/icons/menu.svg";
 import ArrowDownIcon from "assets/icons/arrowdown.svg";
@@ -18,28 +19,43 @@ import LoadingIcon from "assets/icons/loading.svg";
 import ExploreCover from "components/common/ExploreCover";
 import { useSearch } from "hooks/useSearch";
 import { defaultCover } from "../infrastructure/config";
-import type { SearchParams } from "hooks/types"; // Ensure proper import paths
-
-interface Tag {
-  type: "nodeTypes" | "keywords" | "userInput";
-  label: string;
-}
+import type {
+  ItemEntry,
+  SearchParams,
+  Tag,
+  LocationDataItem,
+  LocationInfo,
+} from "hooks/types";
 
 const App: React.FC = () => {
-  const defaultLocation = import.meta.env.VITE_CITY;
-  const defaultState = import.meta.env.VITE_STATE;
-  const initialLocation = locationData[defaultLocation];
+  const defaultLocation = import.meta.env.VITE_CITY as string;
+  const defaultState = import.meta.env.VITE_STATE as string;
+  const initialLocation = locationData[defaultState] as LocationDataItem;
+  const [selectedLocationType, setSelectedLocationType] =
+    useState<string>("state");
+  const [selectedLocationName, setSelectedLocationName] = useState<string>(
+    defaultState === defaultLocation ? "" : defaultLocation
+  );
 
+  // State variables
   const [tags, setTags] = useState<Tag[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
-  const [submittedSearchTerm, setSubmittedSearchTerm] = useState<string>("");
   const [isExploreMode, setIsExploreMode] = useState<boolean>(false);
-  const [selectedLocation, setSelectedLocation] = useState<string>(""); // Set initially empty
+  const [selectedLocation, setSelectedLocation] = useState<string>("");
   const [selectedLocationImage, setSelectedLocationImage] = useState<
     string | undefined
   >(undefined);
+  const [submittedSearchTerm, setSubmittedSearchTerm] = useState<string>("");
 
-  // Use the custom search hook
+  // Map state
+  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>(
+    initialLocation.center
+  );
+  const [mapZoom, setMapZoom] = useState<number>(initialLocation.zoom);
+
+  const [items, setItems] = useState<ItemEntry[]>([]);
+
+  // Use the custom search hook with only 'state' as a parameter
   const {
     locations,
     error: searchError,
@@ -47,173 +63,103 @@ const App: React.FC = () => {
     fetchData: fetchSearchData,
   } = useSearch();
 
-  const [items, setItems] = useState<any[]>([]); // Store search results
-  const [defaultLocationType, setDefaultLocationType] =
-    useState<string>("city");
+  // Memoized values for performance optimization
+  const memoizedMapCenter = useMemo(() => mapCenter, [mapCenter]);
+  const memoizedMapZoom = useMemo(() => mapZoom, [mapZoom]);
+  const memoizedItems = useMemo(() => items, [items]);
 
-  // Manage the map's center and zoom state
-  const [mapCenter, setMapCenter] = useState(initialLocation.center);
-  const [mapZoom, setMapZoom] = useState(initialLocation.zoom);
-  const [selectedLocationName, setSelectedLocationName] =
-    useState<string>(defaultLocation);
-
-  console.log(
-    "locations",
-    selectedLocation,
-    selectedLocationName,
-    defaultLocationType
-  );
-
-  // Search on initial load
+  // Initial data fetch on component mount
   useEffect(() => {
     const initialSearchParams: SearchParams = {
       state: defaultState,
-      location: defaultLocation,
-      locationType: defaultLocationType,
-      nodeTypes: [],
-      keywords: [],
+      keywords: ["hiking", "cruises"],
       userInput: "",
     };
+    fetchSearchData(initialSearchParams);
+  }, [fetchSearchData, defaultState]);
 
-    fetchSearchData(initialSearchParams); // Perform the search on initial load
-  }, [fetchSearchData]);
-
-  // Handle the location change based on top scroll wheel (e.g., 'Alaska')
-  const handleLocationChange = (location: string) => {
-    if (locationData[location]) {
-      // A city is selected, so set location and reset locationType to default
-      setMapCenter(locationData[location].center);
-      setMapZoom(locationData[location].zoom);
-      setSelectedLocationName(location);
-
-      // Set the selected city and reset locationType to its default (e.g., "city")
+  const handleLocationChange = (location: string): void => {
+    const locationInfo = locationData[location] as LocationDataItem;
+    if (locationInfo) {
+      setMapCenter(locationInfo.center);
+      setMapZoom(locationInfo.zoom);
       setSelectedLocation(location);
-      setDefaultLocationType("city"); // Reset locationType to default when a city is selected
+      if (locationInfo.locationType === "state") {
+        setSelectedLocationType("state");
+        setSelectedLocationName(locationInfo.name);
+      } else {
+        setSelectedLocationType(locationInfo.locationType);
+        setSelectedLocationName(locationInfo.name);
+      }
     } else {
-      // A state (like Alaska) is selected, so clear location and locationType
-      setSelectedLocation(""); // Clear location when a state is selected
+      // Reset to default state if location data is not found
+      setSelectedLocation("");
       setSelectedLocationImage(undefined);
-      setSelectedLocationName(defaultState); // Ensure state remains selected
-      setDefaultLocationType(""); // Clear locationType
+      setSelectedLocationName(defaultState);
+      setSelectedLocationType(""); // Reset locationType
     }
   };
 
-  // Handle the Explore button click to display a specific location
-  const handleExploreClick = (location: string, image?: string) => {
+  // Handle the Explore button click
+  const handleExploreClick = (location: string, image?: string): void => {
     setIsExploreMode(true);
     setSelectedLocation(location);
     setSelectedLocationImage(image);
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    if (locationData[location]) {
-      setMapCenter(locationData[location].center);
-      setMapZoom(locationData[location].zoom);
+    const locationInfo = locationData[location] as LocationDataItem;
+    if (locationInfo) {
+      setMapCenter(locationInfo.center);
+      setMapZoom(locationInfo.zoom);
     }
   };
 
-  // Handle the back button in explore mode
-  const handleBack = () => {
+  // Exit explore mode
+  const handleBack = (): void => {
     setIsExploreMode(false);
     setSelectedLocation("");
     setSelectedLocationImage(undefined);
     setItems([]);
-
     setMapCenter(initialLocation.center);
     setMapZoom(initialLocation.zoom);
   };
 
-  // Manage input search change
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle search input change
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchInput(e.target.value);
   };
 
-  // Handle the search form submission
-  const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  // Add a tag to the tags state
+  const addTag = (type: Tag["type"], label: string): void => {
+    setTags((prevTags) => {
+      if (!prevTags.some((tag) => tag.type === type && tag.label === label)) {
+        return [...prevTags, { type, label }];
+      }
+      return prevTags;
+    });
+  };
+
+  // Remove a tag from the tags state
+  const removeSearchTag = (tagToRemove: Tag): void => {
+    setTags((prevTags) => prevTags.filter((tag) => tag !== tagToRemove));
+  };
+
+  // Handle nodeType and keyword clicks
+  const handleNodeTypeClick = (tag: { label: string; value: string }): void =>
+    addTag("nodeTypes", tag.label);
+  const handleKeywordClick = (tag: { label: string; value: string }): void =>
+    addTag("keywords", tag.label);
+
+  // Handle search form submission
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     setIsExploreMode(false);
     setSelectedLocationImage(undefined);
 
     if (searchInput.trim() !== "") {
-      setTags((prevTags) => {
-        if (
-          !prevTags.some(
-            (tag) =>
-              tag.type === "userInput" && tag.label === searchInput.trim()
-          )
-        ) {
-          return [
-            ...prevTags,
-            { type: "userInput", label: searchInput.trim() },
-          ];
-        }
-        return prevTags;
-      });
+      addTag("userInput", searchInput.trim());
       setSearchInput("");
     }
-
-    // Create the search parameters, skipping location and locationType if selectedLocation is empty
-    const nodeTypes = tags
-      .filter((tag) => tag.type === "nodeTypes")
-      .map((tag) => tag.label);
-    const keywords = tags
-      .filter((tag) => tag.type === "keywords")
-      .map((tag) => tag.label);
-    const userInputs = tags
-      .filter((tag) => tag.type === "userInput")
-      .map((tag) => tag.label);
-
-    const searchParams: SearchParams = {
-      state: defaultState,
-      nodeTypes,
-      keywords,
-      userInput: userInputs.join(" "),
-    };
-
-    // Conditionally add location and locationType only if a city is selected
-    if (selectedLocationName !== defaultState) {
-      searchParams.location = selectedLocationName;
-      searchParams.locationType = defaultLocationType;
-    }
-
-    setSubmittedSearchTerm(
-      [...nodeTypes, ...keywords, ...userInputs].join(" ")
-    );
-    await fetchSearchData(searchParams);
-  };
-
-  // Handle nodeTypes selection from ScrollWheelLeft
-  const handleNodeTypeClick = (tag: { label: string; value: string }) => {
-    setTags((prevTags) => {
-      if (
-        !prevTags.some(
-          (existingTag) =>
-            existingTag.type === "nodeTypes" && existingTag.label === tag.label
-        )
-      ) {
-        return [...prevTags, { type: "nodeTypes", label: tag.label }];
-      }
-      return prevTags;
-    });
-  };
-
-  // Handle keywords selection from ScrollWheelRight
-  const handleKeywordClick = (tag: { label: string; value: string }) => {
-    setTags((prevTags) => {
-      if (
-        !prevTags.some(
-          (existingTag) =>
-            existingTag.type === "keywords" && existingTag.label === tag.label
-        )
-      ) {
-        return [...prevTags, { type: "keywords", label: tag.label }];
-      }
-      return prevTags;
-    });
-  };
-
-  // Remove search tag
-  const removeSearchTag = (tagToRemove: Tag) => {
-    setTags((prevTags) => prevTags.filter((tag) => tag !== tagToRemove));
   };
 
   // Update search results when tags change
@@ -224,54 +170,33 @@ const App: React.FC = () => {
     const keywords = tags
       .filter((tag) => tag.type === "keywords")
       .map((tag) => tag.label);
-    const userInputs = tags
+    const userInput = tags
       .filter((tag) => tag.type === "userInput")
-      .map((tag) => tag.label);
+      .map((tag) => tag.label)
+      .join(" ");
+
+    setSubmittedSearchTerm([...nodeTypes, ...keywords, userInput].join(" "));
 
     const searchParams: SearchParams = {
       state: defaultState,
-      nodeTypes,
       keywords,
-      userInput: userInputs.join(" "),
+      userInput,
     };
+    fetchSearchData(searchParams);
+  }, [tags, fetchSearchData, defaultState]);
 
-    // Conditionally add location and locationType only if a city is selected
-    if (selectedLocationName !== defaultState) {
-      searchParams.location = selectedLocationName;
-      searchParams.locationType = defaultLocationType;
-    }
-
-    setSubmittedSearchTerm(
-      [...nodeTypes, ...keywords, ...userInputs].join(" ")
-    );
-
-    if (tags.length > 0) {
-      fetchSearchData(searchParams);
-    } else {
-      setItems([]);
-    }
-  }, [tags, selectedLocationName]);
-
-  // Handle results transformation
+  // Handle search results
   useEffect(() => {
     if (isExploreMode) return;
 
     if (locations.length > 0) {
-      const transformedItems = locations.map((item) => ({
-        title: item.title,
-        description: item.description,
-        url: item.url,
-        markers: item.markers,
-        image: item.image,
-        nodeTypes: item.nodeTypes,
-        keywords: item.keywords,
-      }));
-      setItems(transformedItems);
+      setItems(locations);
     } else {
-      setItems(submittedSearchTerm ? [] : []);
+      setItems([]);
     }
-  }, [locations, submittedSearchTerm, isExploreMode]);
+  }, [locations, isExploreMode]);
 
+  // Masonry grid breakpoint configuration
   const breakpointColumnsObj = {
     default: 3,
     1400: 3,
@@ -279,17 +204,14 @@ const App: React.FC = () => {
     500: 1,
   };
 
-  const memoizedMapCenter = useMemo(() => mapCenter, [mapCenter]);
-  const memoizedMapZoom = useMemo(() => mapZoom, [mapZoom]);
-  const memoizedItems = useMemo(() => items, [items]);
-
   return (
     <main className="relative min-h-screen bg-black w-full">
-      {/* Header and other components */}
+      {/* Header */}
       <header
         className="relative w-full flex items-center justify-center"
         style={{ height: "70vh" }}
       >
+        {/* Map Component */}
         <div className="absolute inset-0 z-30">
           <MapComponent
             itemData={memoizedItems}
@@ -297,6 +219,8 @@ const App: React.FC = () => {
             zoom={memoizedMapZoom}
           />
         </div>
+
+        {/* Top Navigation */}
         <div className="absolute top-0 mt-4 w-full flex items-center justify-between space-x-2">
           <div className="h-10 text-white z-40 flex items-center">
             <Logo />
@@ -365,7 +289,6 @@ const App: React.FC = () => {
                 <HeartIcon />
               </div>
             </button>
-
             <button type="button" className="flex items-center space-x-2">
               <div className="z-40 text-white w-4 h-4 flex-none opacity-60">
                 <ArrowDownIcon />
@@ -382,6 +305,8 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Scroll Wheels */}
         <div className="z-40 w-full flex max-w-2xl items-center justify-center absolute top-0 mt-14 align-middle">
           <ScrollWheelTop
             locationData={locationData}
@@ -389,15 +314,18 @@ const App: React.FC = () => {
           />
         </div>
         <div className="justify-between w-full">
-          <ScrollWheelLeft state={defaultState} onClick={handleNodeTypeClick} />
+          <ScrollWheelLeft onClick={handleNodeTypeClick} />
           <ScrollWheelRight
             state={defaultState}
-            location={selectedLocationName}
-            locationType={defaultLocationType}
+            location={
+              selectedLocationType === "state" ? undefined : selectedLocation
+            }
             onClick={handleKeywordClick}
           />
         </div>
       </header>
+
+      {/* Gradient Overlay */}
       <div
         id="gradient"
         className="relative -inset-y-[170px] z-30 h-[120px]"
@@ -406,6 +334,8 @@ const App: React.FC = () => {
             "linear-gradient(to bottom, rgba(0, 0, 0, 0) 5%, rgba(0, 0, 0, 1) 50%)",
         }}
       />
+
+      {/* Main Content */}
       <section
         className="relative flex flex-col items-center justify-center mx-auto -inset-y-[200px]"
         style={{
@@ -444,11 +374,12 @@ const App: React.FC = () => {
                   title={item.title}
                   description={item.description}
                   url={item.url}
-                  location={item.markers}
                   image={item.image}
                   nodeTypes={item.nodeTypes}
                   keywords={item.keywords}
-                  onClick={() => handleExploreClick(item.location, item.image)}
+                  onClick={() =>
+                    handleExploreClick(item.title || "", item.image)
+                  }
                 />
               </div>
             ))}

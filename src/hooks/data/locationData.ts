@@ -1,7 +1,5 @@
-interface LocationInfo {
-  center: { lat: number; lng: number };
-  zoom: number;
-}
+import type { LocationInfo } from "hooks/types";
+
 export const locationData: Record<string, LocationInfo> = {
   Anywhere: {
     center: { lat: 0, lng: 0 },
@@ -14,9 +12,13 @@ export const locationData: Record<string, LocationInfo> = {
   Alaska: {
     center: { lat: 64.2008, lng: -149.4937 }, // General center of Alaska
     zoom: 5, // Zoom level for Alaska state
+    locationType: "state",
+    name: "Alaska",
   },
   Anchorage: {
     center: { lat: 61.2181, lng: -149.9003 },
     zoom: 12,
+    locationType: "city",
+    name: "Anchorage",
   },
 };

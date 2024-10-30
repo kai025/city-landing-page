@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getAllowedKeywords } from "../utils/api/search";
+import { getAllowedKeywords } from "../utils/api/keywords";
 
 // Helper function to convert string to proper case
 const toProperCase = (str: string): string => {
@@ -7,22 +7,24 @@ const toProperCase = (str: string): string => {
 };
 
 /**
- * Custom hook to fetch allowed keywords based on state, location, and location type from the backend.
+ * Custom hook to fetch allowed keywords based on state, location, locationType, and currentKeyword.
  * @param {string} state - The state name (e.g., 'Alaska').
  * @param {string} [location] - The location name (e.g., 'Anchorage'). Optional.
  * @param {string} [locationType] - The type of the location (e.g., 'city', 'state'). Optional.
+ * @param {string} [currentKeyword] - The current keyword. Optional.
  * @returns {object} - An object containing keywords, loading, error, and a refetch function.
  */
 export const useKeywords = (
   state: string,
   location?: string,
-  locationType?: string
+  locationType?: string,
+  currentKeyword?: string
 ) => {
   const [keywords, setKeywords] = useState<string[]>([]); // State for storing keywords
   const [loading, setLoading] = useState<boolean>(false); // State for loading
   const [error, setError] = useState<string | null>(null); // State for error
 
-  // Function to fetch keywords from the backend based on state, location, and locationType
+  // Function to fetch keywords from the backend based on state, location, locationType, and currentKeyword
   const fetchKeywords = useCallback(async () => {
     setLoading(true);
     setError(null); // Reset error state before making the request
@@ -35,32 +37,27 @@ export const useKeywords = (
         ? toProperCase(locationType)
         : undefined;
 
-      // If the state and location are the same, pass only the state
-      if (properCasedLocation && properCasedState === properCasedLocation) {
-        const fetchedKeywords = await getAllowedKeywords(properCasedState);
-        setKeywords(fetchedKeywords); // Update the keywords state
-      } else {
-        // Pass all parameters if state and location are different
-        const fetchedKeywords = await getAllowedKeywords(
-          properCasedState,
-          properCasedLocation,
-          properCasedLocationType
-        );
-        setKeywords(fetchedKeywords); // Update the keywords state
-      }
+      const fetchedKeywords = await getAllowedKeywords(
+        properCasedState,
+        properCasedLocation,
+        properCasedLocationType,
+        currentKeyword
+      );
+
+      setKeywords(fetchedKeywords); // Update the keywords state
     } catch (err) {
       setError("Failed to fetch keywords from the backend.");
     } finally {
       setLoading(false); // Stop loading state
     }
-  }, [state, location, locationType]);
+  }, [state, location, locationType, currentKeyword]);
 
-  // Fetch keywords when state, location, or locationType changes
+  // Fetch keywords when state, location, locationType, or currentKeyword changes
   useEffect(() => {
     if (state) {
       fetchKeywords();
     }
-  }, [state, location, locationType, fetchKeywords]);
+  }, [state, location, locationType, currentKeyword, fetchKeywords]);
 
   return {
     keywords,
